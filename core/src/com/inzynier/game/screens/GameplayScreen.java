@@ -50,7 +50,11 @@ public class GameplayScreen implements Screen {
     
     private Player player;
     
-   
+    private TiledMap map;
+	private OrthogonalTiledMapRenderer renderer;
+	private Integer tileMapWidth;
+	private Integer tileMapHeight;
+	private Integer tileSize;
 	
     public GameplayScreen(MyGame game){
         this.game = game;
@@ -69,10 +73,63 @@ public class GameplayScreen implements Screen {
     	createPlayer();
     	
     	
-    	
+    	createTiles();
     }
 
-   
+    private void createTiles() {
+    	
+		map = new TmxMapLoader().load("maps/tester.tmx");
+		renderer = new OrthogonalTiledMapRenderer(map);
+		tileMapWidth = (Integer) map.getProperties().get("width");
+		tileMapHeight = (Integer) map.getProperties().get("height");
+		tileSize = (Integer) map.getProperties().get("tilewidth");
+		TiledMapTileLayer layer;
+
+		layer = (TiledMapTileLayer) map.getLayers().get("wall");
+		createLayer(layer, Constants.BIT_WALL);
+
+		layer = (TiledMapTileLayer) map.getLayers().get("ground");
+		createLayer(layer,Constants.BIT_GROUND);
+
+	}
+
+	private void createLayer(TiledMapTileLayer layer, short bits) {
+		BodyDef bodyDef = new BodyDef();
+		FixtureDef fixtureDef = new FixtureDef();
+
+		for (int row = 0; row < layer.getHeight(); row++) {
+			for (int col = 0; col < layer.getWidth(); col++) {
+
+				Cell cell = layer.getCell(col, row);
+
+				if (cell == null) {
+					continue;
+				}
+				if (cell.getTile() == null) {
+					continue;
+				}
+
+				bodyDef.type = BodyType.StaticBody;
+				bodyDef.position.set((col + 0.5f) * tileSize, (row + 0.5f) * tileSize);
+
+				ChainShape cShape = new ChainShape();
+				Vector2[] vector = new Vector2[5];
+				vector[0] = new Vector2(-tileSize /2, -tileSize /2);
+				vector[1] = new Vector2(-tileSize / 2, tileSize / 2);
+				vector[2] = new Vector2(tileSize / 2, tileSize / 2);
+				vector[3] = new Vector2(tileSize / 2, -tileSize / 2);
+				vector[4] = new Vector2(-tileSize /2, -tileSize /2);
+				cShape.createChain(vector);
+				
+				fixtureDef.friction = 0.5f;
+				fixtureDef.shape = cShape;
+				fixtureDef.filter.categoryBits = bits;
+				fixtureDef.filter.maskBits = Constants.BIT_PLAYER;
+				fixtureDef.isSensor = false;
+				world.createBody(bodyDef).createFixture(fixtureDef);
+			}
+		}
+	}
 
 
     private void createPlayer() {
@@ -116,7 +173,8 @@ public class GameplayScreen implements Screen {
         
 		player.update(delta);
 		
-		
+		renderer.setView(camera);
+		renderer.render();
 		
 		b2dr.render(world, camera.combined);
 		
