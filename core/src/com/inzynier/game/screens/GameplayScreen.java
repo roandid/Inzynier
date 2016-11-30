@@ -25,6 +25,10 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.inzynier.game.entities.Player;
 import com.inzynier.game.Constants;
 import com.inzynier.game.MyGame;
+import com.inzynier.game.entities.BasicBullet;
+import com.inzynier.game.entities.InterfaceBullet;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Krzysztof on 26.06.2016.
@@ -41,6 +45,8 @@ public class GameplayScreen implements Screen {
     private Box2DDebugRenderer b2dr;
 
     private Player player;
+    private InterfaceBullet bullet = null;
+    private List<InterfaceBullet> listPlayerBullets = new ArrayList<InterfaceBullet>();
 
     private TiledMap map;
     private OrthogonalTiledMapRenderer renderer;
@@ -173,7 +179,12 @@ public class GameplayScreen implements Screen {
         world.step(delta, 6, 2);
 
         player.update(delta);
-        
+
+        for (int i = 0; i < this.listPlayerBullets.size(); i++) {
+            this.listPlayerBullets.get(i).update();
+        }
+
+
         renderer.setView(camera);
         renderer.render();
         
@@ -206,6 +217,25 @@ public class GameplayScreen implements Screen {
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
             player.getBody().applyForceToCenter(1500, 0, true);
         }
+
+        //Generowanie nowych pocisków przez klikanie na przyciski w,a,s,d
+        if (Gdx.input.isKeyJustPressed(Input.Keys.A)) {
+            this.bullet = new BasicBullet(this.player.getBody().getPosition().x, this.player.getBody().getPosition().y, InterfaceBullet.LEFT, 1000);
+            this.listPlayerBullets.add(this.bullet.generateBullet(this.world));
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.W)) {
+            this.bullet = new BasicBullet(this.player.getBody().getPosition().x, this.player.getBody().getPosition().y, InterfaceBullet.UP, 1000);
+            this.listPlayerBullets.add(this.bullet.generateBullet(this.world));
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.S)) {
+            this.bullet = new BasicBullet(this.player.getBody().getPosition().x, this.player.getBody().getPosition().y, InterfaceBullet.DOWN, 1000);
+            this.listPlayerBullets.add(this.bullet.generateBullet(this.world));
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.D)) {
+            this.bullet = new BasicBullet(this.player.getBody().getPosition().x, this.player.getBody().getPosition().y, InterfaceBullet.RIGHT, 1000);
+            this.listPlayerBullets.add(this.bullet.generateBullet(this.world));
+        }
+
     }
 
     private boolean isPlayerOutOfMap() {
