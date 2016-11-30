@@ -7,8 +7,8 @@ import com.inzynier.game.screens.GameplayScreen;
 public class MyGame extends Game {
     public final static String GAME_NAME = "Game";
 
-    public final static int WIDTH = 512;
-    public final static int HEIGHT = 384;
+    public final static int WIDTH = 640;
+    public final static int HEIGHT = 448;
     public final static int SCALE = 2;
     private boolean paused;
 
@@ -20,9 +20,9 @@ public class MyGame extends Game {
     }
 
     private void init() {
-
+        
     }
-
+    
     public boolean isPaused() {
         return paused;
     }

@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
@@ -53,6 +54,8 @@ public class GameplayScreen implements Screen {
     private Integer tileMapHeight;
     private Integer tileSize;
 
+    private Texture leftWall, rightWall, upWall, downWall;
+
     public GameplayScreen(MyGame game) {
         this.game = game;
         createCamera();
@@ -64,12 +67,22 @@ public class GameplayScreen implements Screen {
 
         world = new World(new Vector2(0, 0), true);
 
-        //debug
+        // debug
         b2dr = new Box2DDebugRenderer();
 
         createPlayer();
-
+        
         createTiles();
+
+        createWalls();
+    }
+
+    private void createWalls() {
+
+        leftWall = new Texture("walls/wall_left.png");
+        rightWall = new Texture("walls/wall_right.png");
+        upWall = new Texture("walls/wall_up.png");
+        downWall = new Texture("walls/wall_down.png");
     }
 
     private void createTiles() {
@@ -132,13 +145,14 @@ public class GameplayScreen implements Screen {
         PolygonShape shape = new PolygonShape();
         FixtureDef fixtureDef = new FixtureDef();
 
-        bodyDef.position.set(MyGame.WIDTH / 2, MyGame.HEIGHT / 2);
+        bodyDef.position.set(MyGame.WIDTH / 2 , MyGame.HEIGHT / 2);
         bodyDef.type = BodyType.DynamicBody;
         bodyDef.linearDamping = 3.5f;
-
+        
+        
         Body body = world.createBody(bodyDef);
 
-        shape.setAsBox(10, 10);
+        shape.setAsBox(14, 12);
         fixtureDef.shape = shape;
         fixtureDef.friction = 0.5f;
         fixtureDef.filter.categoryBits = Constants.BIT_PLAYER;
@@ -165,22 +179,34 @@ public class GameplayScreen implements Screen {
         world.step(delta, 6, 2);
 
         player.update(delta);
+
         for (int i = 0; i < this.listPlayerBullets.size(); i++) {
             this.listPlayerBullets.get(i).update();
         }
 
+
         renderer.setView(camera);
         renderer.render();
-
+        
+        spriteBatch.begin();
+        spriteBatch.draw(leftWall, 0, 64, 64, 320);
+        spriteBatch.draw(rightWall, MyGame.WIDTH - 64, 64, 64, 320);
+        spriteBatch.draw(upWall, 0, MyGame.HEIGHT - 64, MyGame.WIDTH, 64);
+        spriteBatch.draw(downWall, 0, 0, MyGame.WIDTH, 64);
+        spriteBatch.end();
+        
+       
+        
+        player.render(spriteBatch);
         b2dr.render(world, camera.combined);
-
+       
         if (isPlayerOutOfMap()) {
             game.setScreen(new GameplayScreen(game));
         }
 
-        //test
+        // test
         if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            player.getBody().applyForceToCenter(0, 1500, true);
+            player.getBody().applyForceToCenter(0, 150000, true);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
             player.getBody().applyForceToCenter(0, -1500, true);
