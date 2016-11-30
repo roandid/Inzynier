@@ -8,7 +8,7 @@ import com.inzynier.game.MyGame;
 public class Player extends B2DSprite {
 	
 	
-	private Texture right;
+	private Texture player;
 	private Texture left;
 	private TextureRegion[] spritesRight;
 	private TextureRegion[] spritesLeft;
@@ -16,11 +16,10 @@ public class Player extends B2DSprite {
 	public Player(Body body) {
 		super(body);
 		
-		/*right = MyGame.res.getTexture("megaman");
-		spritesRight = TextureRegion.split(right, 32, 32)[0];
-		left = MyGame.res.getTexture("left");
-		spritesLeft = TextureRegion.split(left, 32, 32)[0];
-		setAnimation(spritesRight, 1 / 12f);*/
+		player = new Texture("issac.png");
+		spritesRight = TextureRegion.split(player, 48, 64)[0];
+		setAnimation(spritesRight, 1 / 12f);
+		
 	}
 	
 	public void setTexture(boolean isLeft){
