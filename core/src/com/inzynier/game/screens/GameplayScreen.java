@@ -71,7 +71,7 @@ public class GameplayScreen implements Screen {
         b2dr = new Box2DDebugRenderer();
 
         createPlayer();
-        
+
         createTiles();
 
         createWalls();
@@ -105,6 +105,7 @@ public class GameplayScreen implements Screen {
     private void createLayer(TiledMapTileLayer layer, short bits) {
         BodyDef bodyDef = new BodyDef();
         FixtureDef fixtureDef = new FixtureDef();
+        float ntileSize = Constants.toBox2d(tileSize);
 
         for (int row = 0; row < layer.getHeight(); row++) {
             for (int col = 0; col < layer.getWidth(); col++) {
@@ -119,15 +120,15 @@ public class GameplayScreen implements Screen {
                 }
 
                 bodyDef.type = BodyType.StaticBody;
-                bodyDef.position.set((col + 0.5f) * tileSize, (row + 0.5f) * tileSize);
+                bodyDef.position.set((col + 0.5f) * ntileSize, (row + 0.5f) * ntileSize);
 
                 ChainShape cShape = new ChainShape();
                 Vector2[] vector = new Vector2[5];
-                vector[0] = new Vector2(-tileSize / 2, -tileSize / 2);
-                vector[1] = new Vector2(-tileSize / 2, tileSize / 2);
-                vector[2] = new Vector2(tileSize / 2, tileSize / 2);
-                vector[3] = new Vector2(tileSize / 2, -tileSize / 2);
-                vector[4] = new Vector2(-tileSize / 2, -tileSize / 2);
+                vector[0] = new Vector2(-ntileSize / 2, -ntileSize / 2);
+                vector[1] = new Vector2(-ntileSize / 2, ntileSize / 2);
+                vector[2] = new Vector2(ntileSize / 2, ntileSize / 2);
+                vector[3] = new Vector2(ntileSize / 2, -ntileSize / 2);
+                vector[4] = new Vector2(-ntileSize / 2, -ntileSize / 2);
                 cShape.createChain(vector);
 
                 fixtureDef.friction = 0.8f;
@@ -145,14 +146,13 @@ public class GameplayScreen implements Screen {
         PolygonShape shape = new PolygonShape();
         FixtureDef fixtureDef = new FixtureDef();
 
-        bodyDef.position.set(MyGame.WIDTH / 2 , MyGame.HEIGHT / 2);
+        bodyDef.position.set(Constants.toBox2d(MyGame.WIDTH) / 2, Constants.toBox2d(MyGame.HEIGHT) / 2);
         bodyDef.type = BodyType.DynamicBody;
-        bodyDef.linearDamping = 3.5f;
-        
-        
+        bodyDef.linearDamping = 20.5f;
+
         Body body = world.createBody(bodyDef);
 
-        shape.setAsBox(14, 12);
+        shape.setAsBox(Constants.toBox2d(14), Constants.toBox2d(12));
         fixtureDef.shape = shape;
         fixtureDef.friction = 0.5f;
         fixtureDef.filter.categoryBits = Constants.BIT_PLAYER;
@@ -184,29 +184,26 @@ public class GameplayScreen implements Screen {
             this.listPlayerBullets.get(i).update();
         }
 
-
         renderer.setView(camera);
         renderer.render();
-        
+
         spriteBatch.begin();
         spriteBatch.draw(leftWall, 0, 64, 64, 320);
         spriteBatch.draw(rightWall, MyGame.WIDTH - 64, 64, 64, 320);
         spriteBatch.draw(upWall, 0, MyGame.HEIGHT - 64, MyGame.WIDTH, 64);
         spriteBatch.draw(downWall, 0, 0, MyGame.WIDTH, 64);
         spriteBatch.end();
-        
-       
-        
+
         player.render(spriteBatch);
         b2dr.render(world, camera.combined);
-       
+
         if (isPlayerOutOfMap()) {
             game.setScreen(new GameplayScreen(game));
         }
 
         // test
         if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            player.getBody().applyForceToCenter(0, 150000, true);
+            player.getBody().applyForceToCenter(0, 1500, true);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
             player.getBody().applyForceToCenter(0, -1500, true);
