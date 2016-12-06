@@ -32,16 +32,16 @@ public class BasicBullet implements InterfaceBullet {
     private float forceY = 0;
 
     private Body body = null;
-    
+
     public BasicBullet() {
     }
 
     public BasicBullet(float startPosX, float startPosY, byte dir, float force) {
-        this.setSize(5, 5);
+        this.setSize(Constants.toBox2d(5), Constants.toBox2d(5));
         this.setStartPosition(startPosX, startPosY);
         this.setForceDir(dir, force);
     }
-    
+
     @Override
     public void setStartPosition(float x, float y) {
         this.startPosX = x;
@@ -73,7 +73,7 @@ public class BasicBullet implements InterfaceBullet {
         fixtureDef.filter.categoryBits = Constants.BIT_PLAYER;
         fixtureDef.filter.maskBits = Constants.BIT_WALL;
         this.body.createFixture(fixtureDef);
-        
+
         return this;
     }
 
