@@ -24,6 +24,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 
 import com.inzynier.game.entities.Player;
 import com.inzynier.game.Constants;
+import com.inzynier.game.MyContactListener;
 import com.inzynier.game.MyGame;
 import com.inzynier.game.entities.BasicBullet;
 import com.inzynier.game.entities.InterfaceBullet;
@@ -41,6 +42,8 @@ public class GameplayScreen implements Screen {
 
     protected SpriteBatch spriteBatch;
 
+    private MyContactListener contactListener;
+    
     private World world;
     private Box2DDebugRenderer b2dr;
 
@@ -66,6 +69,8 @@ public class GameplayScreen implements Screen {
     private void init() {
 
         world = new World(new Vector2(0, 0), true);
+        this.contactListener = new MyContactListener();
+        this.world.setContactListener(this.contactListener);
 
         // debug
         b2dr = new Box2DDebugRenderer();
@@ -95,14 +100,14 @@ public class GameplayScreen implements Screen {
         TiledMapTileLayer layer;
 
         layer = (TiledMapTileLayer) map.getLayers().get("wall");
-        createLayer(layer, Constants.BIT_WALL);
+        createLayer(layer, Constants.BIT_WALL, "wall");
 
         layer = (TiledMapTileLayer) map.getLayers().get("ground");
-        createLayer(layer, Constants.BIT_GROUND);
+        createLayer(layer, Constants.BIT_GROUND, "ground");
 
     }
 
-    private void createLayer(TiledMapTileLayer layer, short bits) {
+    private void createLayer(TiledMapTileLayer layer, short bits, String name) {
         BodyDef bodyDef = new BodyDef();
         FixtureDef fixtureDef = new FixtureDef();
         float ntileSize = Constants.toBox2d(tileSize);
@@ -195,6 +200,9 @@ public class GameplayScreen implements Screen {
         spriteBatch.end();
 
         player.render(spriteBatch);
+        for (int i = 0; i < this.listPlayerBullets.size(); i++) {
+            this.listPlayerBullets.get(i).render(spriteBatch);
+        }
         b2dr.render(world, camera.combined);
 
         if (isPlayerOutOfMap()) {
@@ -203,34 +211,38 @@ public class GameplayScreen implements Screen {
 
         // test
         if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            player.getBody().applyForceToCenter(0, 1500, true);
+            player.getBody().applyForceToCenter(0, 400, true);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-            player.getBody().applyForceToCenter(0, -1500, true);
+            player.getBody().applyForceToCenter(0, -400, true);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            player.getBody().applyForceToCenter(-1500, 0, true);
+            player.getBody().applyForceToCenter(-400, 0, true);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            player.getBody().applyForceToCenter(1500, 0, true);
+            player.getBody().applyForceToCenter(400, 0, true);
         }
 
         //Generowanie nowych pocisków przez klikanie na przyciski w,a,s,d
         if (Gdx.input.isKeyJustPressed(Input.Keys.A)) {
-            this.bullet = new BasicBullet(this.player.getBody().getPosition().x, this.player.getBody().getPosition().y, InterfaceBullet.LEFT, 1000);
+            this.bullet = new BasicBullet(this.player.getBody().getPosition().x, this.player.getBody().getPosition().y, InterfaceBullet.LEFT, 250, new Texture("issac.png"));
             this.listPlayerBullets.add(this.bullet.generateBullet(this.world));
+            this.contactListener.setListBullet(this.listPlayerBullets);
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.W)) {
-            this.bullet = new BasicBullet(this.player.getBody().getPosition().x, this.player.getBody().getPosition().y, InterfaceBullet.UP, 1000);
+            this.bullet = new BasicBullet(this.player.getBody().getPosition().x, this.player.getBody().getPosition().y, InterfaceBullet.UP, 250, new Texture("issac.png"));
             this.listPlayerBullets.add(this.bullet.generateBullet(this.world));
+            this.contactListener.setListBullet(this.listPlayerBullets);
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.S)) {
-            this.bullet = new BasicBullet(this.player.getBody().getPosition().x, this.player.getBody().getPosition().y, InterfaceBullet.DOWN, 1000);
+            this.bullet = new BasicBullet(this.player.getBody().getPosition().x, this.player.getBody().getPosition().y, InterfaceBullet.DOWN, 250, new Texture("issac.png"));
             this.listPlayerBullets.add(this.bullet.generateBullet(this.world));
+            this.contactListener.setListBullet(this.listPlayerBullets);
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.D)) {
-            this.bullet = new BasicBullet(this.player.getBody().getPosition().x, this.player.getBody().getPosition().y, InterfaceBullet.RIGHT, 1000);
+            this.bullet = new BasicBullet(this.player.getBody().getPosition().x, this.player.getBody().getPosition().y, InterfaceBullet.RIGHT, 250, new Texture("issac.png"));
             this.listPlayerBullets.add(this.bullet.generateBullet(this.world));
+            this.contactListener.setListBullet(this.listPlayerBullets);
         }
 
     }

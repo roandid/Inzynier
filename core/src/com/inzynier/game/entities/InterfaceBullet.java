@@ -5,6 +5,9 @@
  */
 package com.inzynier.game.entities;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 
 /**
@@ -28,4 +31,10 @@ public interface InterfaceBullet {
     public InterfaceBullet generateBullet(World world);
     
     public void update();
+    
+    public void setTexture(Texture texture);
+    
+    public void render(SpriteBatch sb);
+    
+    public Body getBody();
 }
