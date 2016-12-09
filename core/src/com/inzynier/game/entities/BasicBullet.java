@@ -5,12 +5,15 @@
  */
 package com.inzynier.game.entities;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.inzynier.game.Animation;
 import com.inzynier.game.Constants;
 
 /**
@@ -31,15 +34,19 @@ public class BasicBullet implements InterfaceBullet {
     private float forceX = 0;
     private float forceY = 0;
 
+    private Texture texture;
+    private Animation animation;
+
     private Body body = null;
 
     public BasicBullet() {
     }
 
-    public BasicBullet(float startPosX, float startPosY, byte dir, float force) {
+    public BasicBullet(float startPosX, float startPosY, byte dir, float force, Texture texture) {
         this.setSize(Constants.toBox2d(5), Constants.toBox2d(5));
         this.setStartPosition(startPosX, startPosY);
         this.setForceDir(dir, force);
+        this.setTexture(texture);
     }
 
     @Override
@@ -62,6 +69,11 @@ public class BasicBullet implements InterfaceBullet {
         PolygonShape shape = new PolygonShape();
         FixtureDef fixtureDef = new FixtureDef();
 
+        this.spritesRight = TextureRegion.split(this.texture, 48, 64)[0];
+        this.animation = new Animation();
+
+        animation.setFrames(this.spritesRight, 1/12f);
+
         bodyDef.position.set(this.startPosX, this.startPosY);
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.linearDamping = 3.5f;
@@ -73,7 +85,7 @@ public class BasicBullet implements InterfaceBullet {
         fixtureDef.filter.categoryBits = Constants.BIT_PLAYER;
         fixtureDef.filter.maskBits = Constants.BIT_WALL;
         this.body.createFixture(fixtureDef);
-
+        this.body.setUserData("bullet");
         return this;
     }
 
@@ -111,5 +123,22 @@ public class BasicBullet implements InterfaceBullet {
             }
             break;
         }
+    }
+
+    @Override
+    public void render(SpriteBatch sb) {
+        sb.begin();
+        sb.draw(animation.getFrame(), Constants.fromBox2d(body.getPosition().x), Constants.fromBox2d(body.getPosition().y));
+        sb.end();
+    }
+
+    @Override
+    public void setTexture(Texture texture) {
+        this.texture = texture;
+    }
+
+    @Override
+    public Body getBody() {
+        return this.body;
     }
 }
