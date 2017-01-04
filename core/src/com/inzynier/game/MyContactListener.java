@@ -1,56 +1,50 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.inzynier.game;
 
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
-import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
-import com.inzynier.game.entities.InterfaceBullet;
-import java.util.List;
+import com.inzynier.game.contact.ContactHandlerInterface;
 
-/**
- *
- * @author M.Koszowski
- */
 public class MyContactListener implements ContactListener {
 
-    List<InterfaceBullet> listBullet;
+    protected ContactHandlerInterface[] handlers;
 
-    public void setListBullet(List<InterfaceBullet> listBullet) {
-        this.listBullet = listBullet;
+    public MyContactListener(ContactHandlerInterface[] handlers) {
+        this.handlers = handlers;
     }
 
     @Override
     public void beginContact(Contact contact) {
-        Fixture a = contact.getFixtureA();
-        Fixture b = contact.getFixtureB();
-        if ((b.getBody().getUserData().equals("bullet")) && (a.getBody().getUserData() == null)) {
-            for (int i = 0; i < this.listBullet.size(); i++) {
-                if (this.listBullet.get(i).getBody().equals(b.getBody())) {
-                    this.listBullet.remove(i);
-                }
-            }
-        }
+
+        this.getHandler(contact).beginContact(contact);
     }
 
     @Override
     public void endContact(Contact cntct) {
 
+        this.getHandler(cntct).endContact(cntct);
     }
 
     @Override
     public void preSolve(Contact cntct, Manifold mnfld) {
 
+        this.getHandler(cntct).preSolve(cntct, mnfld);
     }
 
     @Override
     public void postSolve(Contact cntct, ContactImpulse ci) {
 
+        this.getHandler(cntct).postSolve(cntct, ci);
     }
 
+    protected ContactHandlerInterface getHandler(Contact contact) {
+        for (int i = 0; i < this.handlers.length; ++i) {
+            if (handlers[i].support(contact)) {
+                return this.handlers[i];
+            }
+        }
+
+        throw new RuntimeException("Handler for contact not found.");
+    }
 }
