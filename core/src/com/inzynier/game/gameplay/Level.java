@@ -3,13 +3,13 @@ package com.inzynier.game.gameplay;
 import com.inzynier.game.entities.Doors;
 import com.inzynier.game.entities.Player;
 import com.inzynier.game.entities.Position;
-import com.inzynier.game.gameplay.map.LayerFactory;
-import com.inzynier.game.gameplay.map.LayerFactoryInterface;
+import com.inzynier.game.gameplay.map.LayerGenerator;
+import com.inzynier.game.gameplay.map.LayerGeneratorInterface;
 
 public class Level {
 
     protected Player player;
-    protected LayerFactoryInterface layerFactory;
+    protected LayerGeneratorInterface layerFactory;
     protected Room room;
 
     /**
@@ -19,7 +19,7 @@ public class Level {
      */
     public Level(Player player) {
         this.player = player;
-        this.layerFactory = new LayerFactory();
+        this.layerFactory = new LayerGenerator();
     }
 
     public void init() {

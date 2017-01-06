@@ -10,10 +10,10 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.inzynier.game.Constants;
 
-public class LayerFactory implements LayerFactoryInterface {
+public class LayerGenerator implements LayerGeneratorInterface {
 
     @Override
-    public void createLayer(World world, TiledMapTileLayer layer, short bits, int tileSize) {
+    public void generateLayer(World world, TiledMapTileLayer layer, short bits, int tileSize) {
         float ntileSize = Constants.toBox2d(tileSize);
         ChainShape cShape = this.createChainShape(ntileSize);
         FixtureDef fixtureDef = this.createFixtureDef(cShape, bits);

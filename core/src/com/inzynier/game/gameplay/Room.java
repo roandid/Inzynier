@@ -20,7 +20,7 @@ import com.inzynier.game.entities.Doors;
 import com.inzynier.game.entities.DrawableInterface;
 import com.inzynier.game.entities.Player;
 import com.inzynier.game.entities.Position;
-import com.inzynier.game.gameplay.map.LayerFactoryInterface;
+import com.inzynier.game.gameplay.map.LayerGeneratorInterface;
 
 public class Room {
 
@@ -31,11 +31,11 @@ public class Room {
     protected World world;
     protected Box2DDebugRenderer b2dr;
     protected SpriteBatch spriteBatch;
-    protected LayerFactoryInterface layerFactory;
+    protected LayerGeneratorInterface layerFactory;
     protected OrthographicCamera camera;
     protected Texture leftWall, rightWall, upWall, downWall;
 
-    public Room(String mapName, Player player, Doors doors, LayerFactoryInterface layerFactory) {
+    public Room(String mapName, Player player, Doors doors, LayerGeneratorInterface layerFactory) {
 
         this.player = player;
         this.doors = doors;
@@ -58,8 +58,8 @@ public class Room {
         this.spriteBatch.setProjectionMatrix(this.camera.combined);
         int tileSize = (Integer) map.getProperties().get("tilewidth");
 
-//        this.layerFactory.createLayer(this.world, (TiledMapTileLayer) this.map.getLayers().get("ground"), Constants.BIT_GROUND, tileSize);
-        this.layerFactory.createLayer(this.world, (TiledMapTileLayer) this.map.getLayers().get("wall"), Constants.BIT_WALL, tileSize);
+        this.layerFactory.generateLayer(this.world, (TiledMapTileLayer) this.map.getLayers().get("ground"), Constants.BIT_GROUND, tileSize);
+        this.layerFactory.generateLayer(this.world, (TiledMapTileLayer) this.map.getLayers().get("wall"), Constants.BIT_WALL, tileSize);
     }
 
     public void wakeUp(Position position) {

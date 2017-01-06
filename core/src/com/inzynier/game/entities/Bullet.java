@@ -5,10 +5,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
+import com.inzynier.game.Constants;
 
 /**
  * Może powinien zostać interfejs dla Bulletow ale prpoponuje o tym pomyśleć w
- * przypadku gdy będziemy robić też inny Bullety
+ * przypadku gdy będziemy robić też inne Bullety
  */
 public class Bullet implements DrawableInterface {
 
@@ -16,15 +17,13 @@ public class Bullet implements DrawableInterface {
     protected Vector2 force;
     protected Texture texture;
     protected short power;
+    protected FighterInterface owner;
 
-    /**
-     * Pewnie jeszcze powinien być owner, sila i inne takie. Może zamiast
-     * konstruktora zrobić gettery i settery?
-     */
-    public Bullet(Body body, Vector2 force, Texture texture) {
+    public Bullet(Body body, Vector2 force, Texture texture, FighterInterface owner) {
         this.body = body;
         this.force = force;
         this.texture = texture;
+        this.owner = owner;
     }
 
     @Override
@@ -35,6 +34,6 @@ public class Bullet implements DrawableInterface {
     @Override
     public void draw(SpriteBatch sb) {
         Vector2 position = this.body.getPosition();
-        sb.draw(texture, position.x, position.y);
+        sb.draw(this.texture, Constants.fromBox2d(position.x) - this.texture.getWidth() / 2, Constants.fromBox2d(position.y) - this.texture.getHeight());
     }
 }
