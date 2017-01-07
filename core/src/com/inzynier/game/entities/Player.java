@@ -58,7 +58,7 @@ public class Player implements DrawableInterface, MovableInterface, FighterInter
     public void draw(SpriteBatch sb) {
         Vector2 position = this.body.getTransform().getPosition();
 
-        sb.draw(this.player, Constants.fromBox2d(position.x) - this.player.getWidth() / 2, Constants.fromBox2d(position.y) - this.player.getHeight() / 2 + 20);
+        sb.draw(this.player, Constants.fromBox2d(position.x) - this.player.getWidth() / 2 + 15, Constants.fromBox2d(position.y) - this.player.getHeight() / 2 + 35);
     }
 
     @Override
