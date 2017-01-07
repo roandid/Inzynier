@@ -49,6 +49,7 @@ public class PlayerRangedFightStrategy implements FightStrategyInterface {
         bodyDef.position.set(fighter.getPosition().x, fighter.getPosition().y);
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.linearDamping = 3.5f;
+        bodyDef.bullet = true;
 
         return bodyDef;
     }

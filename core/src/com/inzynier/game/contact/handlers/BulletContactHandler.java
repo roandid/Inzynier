@@ -4,7 +4,9 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.Manifold;
+import com.inzynier.game.contact.ActionsDispatcher;
 import com.inzynier.game.contact.ContactHandlerInterface;
+import com.inzynier.game.contact.actions.DestroyAction;
 import com.inzynier.game.entities.Bullet;
 
 public class BulletContactHandler implements ContactHandlerInterface {
@@ -35,11 +37,11 @@ public class BulletContactHandler implements ContactHandlerInterface {
         Body b = cntct.getFixtureB().getBody();
 
         if (a.getUserData() instanceof Bullet) {
-            a.getWorld().destroyBody(a);
+            ActionsDispatcher.addAction(new DestroyAction(a));
         }
 
         if (b.getUserData() instanceof Bullet) {
-            b.getWorld().destroyBody(b);
+            ActionsDispatcher.addAction(new DestroyAction(b));
         }
     }
 

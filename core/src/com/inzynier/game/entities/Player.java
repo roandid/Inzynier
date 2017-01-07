@@ -95,7 +95,7 @@ public class Player implements DrawableInterface, MovableInterface, FighterInter
     protected void createFixtureDef() {
         PolygonShape shape = new PolygonShape();
 
-        shape.setAsBox(Constants.toBox2d(18), Constants.toBox2d(16));
+        shape.setAsBox(Constants.toBox2d(14), Constants.toBox2d(12));
         this.fixtureDef.shape = shape;
         this.fixtureDef.friction = 0.5f;
         this.fixtureDef.filter.categoryBits = Constants.BIT_PLAYER;

@@ -1,17 +1,34 @@
 package com.inzynier.game;
 
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.inzynier.game.contact.ContactHandlerInterface;
+import com.inzynier.game.contact.handlers.BulletContactHandler;
+import com.inzynier.game.contact.handlers.DummyContactHandler;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MyContactListener implements ContactListener {
 
-    protected ContactHandlerInterface[] handlers;
+    protected List<ContactHandlerInterface> handlers;
+    protected List<Body> toDestroy;
+    protected static MyContactListener instance;
 
-    public MyContactListener(ContactHandlerInterface[] handlers) {
-        this.handlers = handlers;
+    public static MyContactListener getListener() {
+        if (MyContactListener.instance instanceof MyContactListener) {
+            return MyContactListener.instance;
+        }
+
+        List<ContactHandlerInterface> handlers = new ArrayList<ContactHandlerInterface>();
+        handlers.add(new BulletContactHandler());
+        handlers.add(new DummyContactHandler());
+
+        MyContactListener.instance = new MyContactListener(handlers);
+
+        return MyContactListener.instance;
     }
 
     @Override
@@ -38,10 +55,14 @@ public class MyContactListener implements ContactListener {
         this.getHandler(cntct).postSolve(cntct, ci);
     }
 
+    protected MyContactListener(List<ContactHandlerInterface> handlers) {
+        this.handlers = handlers;
+    }
+
     protected ContactHandlerInterface getHandler(Contact contact) {
-        for (int i = 0; i < this.handlers.length; ++i) {
-            if (handlers[i].support(contact)) {
-                return this.handlers[i];
+        for (int i = 0; i < this.handlers.size(); ++i) {
+            if (handlers.get(i).support(contact)) {
+                return this.handlers.get(i);
             }
         }
 

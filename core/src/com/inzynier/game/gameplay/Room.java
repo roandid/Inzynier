@@ -15,12 +15,18 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.inzynier.game.Constants;
+import com.inzynier.game.MyContactListener;
 import com.inzynier.game.MyGame;
+import com.inzynier.game.contact.ActionsDispatcher;
+import com.inzynier.game.contact.ContactHandlerInterface;
+import com.inzynier.game.contact.handlers.BulletContactHandler;
 import com.inzynier.game.entities.Doors;
 import com.inzynier.game.entities.DrawableInterface;
 import com.inzynier.game.entities.Player;
 import com.inzynier.game.entities.Position;
 import com.inzynier.game.gameplay.map.LayerGeneratorInterface;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Room {
 
@@ -43,7 +49,8 @@ public class Room {
 
         this.map = new TmxMapLoader().load(mapName);
         this.renderer = new OrthogonalTiledMapRenderer(map);
-        this.world = new World(new Vector2(0, 0), false);
+        this.world = new World(new Vector2(0, 0), true);
+        this.world.setContactListener(MyContactListener.getListener());
         this.b2dr = new Box2DDebugRenderer();
         this.spriteBatch = new SpriteBatch();
         this.camera = new OrthographicCamera();
@@ -88,7 +95,8 @@ public class Room {
         this.renderer.setView(camera);
         this.renderer.render();
 
-        this.world.step(dt, 0, 0);
+        ActionsDispatcher.dispatch();
+        this.world.step(dt, 6, 2);
         Array<Body> array = this.getBodies();
 
         this.updateObjects(array, dt);

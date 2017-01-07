@@ -7,6 +7,8 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.ChainShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.inzynier.game.Constants;
 
@@ -15,7 +17,7 @@ public class LayerGenerator implements LayerGeneratorInterface {
     @Override
     public void generateLayer(World world, TiledMapTileLayer layer, short bits, int tileSize) {
         float ntileSize = Constants.toBox2d(tileSize);
-        ChainShape cShape = this.createChainShape(ntileSize);
+        Shape cShape = this.createChainShape(ntileSize);
         FixtureDef fixtureDef = this.createFixtureDef(cShape, bits);
         BodyDef bodyDef;
 
@@ -50,7 +52,7 @@ public class LayerGenerator implements LayerGeneratorInterface {
         return vector;
     }
 
-    protected ChainShape createChainShape(float size) {
+    protected Shape createChainShape(float size) {
         ChainShape cShape = new ChainShape();
         cShape.createChain(this.createShapeVector(size));
 
@@ -61,12 +63,12 @@ public class LayerGenerator implements LayerGeneratorInterface {
         BodyDef bodyDef = new BodyDef();
 
         bodyDef.type = BodyType.StaticBody;
-        bodyDef.position.set((col + 0.5f) * size, (row + 0.5f) * size);
+        bodyDef.position.set((col) * size, (row) * size);
 
         return bodyDef;
     }
 
-    protected FixtureDef createFixtureDef(ChainShape cShape, short bits) {
+    protected FixtureDef createFixtureDef(Shape cShape, short bits) {
         FixtureDef fixtureDef = new FixtureDef();
 
         fixtureDef.friction = 0.8f;
