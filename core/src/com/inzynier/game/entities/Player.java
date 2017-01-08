@@ -51,7 +51,7 @@ public class Player implements DrawableInterface, MovableInterface, FighterInter
     @Override
     public void update(float dt, World world) {
         this.moveStrategy.move(this, dt, world);
-        this.fightStrategy.fight(this, world);
+        this.fightStrategy.fight(this, dt, world);
     }
 
     @Override

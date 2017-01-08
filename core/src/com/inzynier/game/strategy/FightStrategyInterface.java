@@ -5,5 +5,5 @@ import com.inzynier.game.entities.FighterInterface;
 
 public interface FightStrategyInterface {
 
-    public void fight(FighterInterface fighter, World world);
+    public void fight(FighterInterface fighter, float dt, World world);
 }
