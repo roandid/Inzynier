@@ -30,6 +30,7 @@ public class ActorBuilder {
 
     public ActorBuilder setIsPlayer(boolean isPlayer) {
         this.isPlayer = isPlayer;
+        this.fixtureDef.filter.categoryBits = Constants.BIT_PLAYER;
 
         return this;
     }
@@ -108,8 +109,8 @@ public class ActorBuilder {
         shape.setAsBox(Constants.toBox2d(14), Constants.toBox2d(12));
         fixtureDef.shape = shape;
         fixtureDef.friction = 0.5f;
-        fixtureDef.filter.categoryBits = Constants.BIT_PLAYER;
-        fixtureDef.filter.maskBits = Constants.BIT_WALL;
+        fixtureDef.filter.categoryBits = Constants.BIT_ENEMY;
+        fixtureDef.filter.maskBits = Constants.BIT_WALL | Constants.BIT_BULLET;
 
         return fixtureDef;
     }

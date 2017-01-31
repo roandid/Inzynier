@@ -17,12 +17,19 @@ import com.badlogic.gdx.utils.Array;
 import com.inzynier.game.Constants;
 import com.inzynier.game.MyContactListener;
 import com.inzynier.game.MyGame;
+import com.inzynier.game.builder.ActorBuilder;
 import com.inzynier.game.contact.ActionsDispatcher;
 import com.inzynier.game.entities.Doors;
 import com.inzynier.game.entities.DrawableInterface;
 import com.inzynier.game.entities.Actor;
 import com.inzynier.game.entities.Position;
+import com.inzynier.game.factory.ActorFactory;
 import com.inzynier.game.gameplay.map.LayerGeneratorInterface;
+import com.inzynier.game.strategy.DoubleStrategy;
+import com.inzynier.game.strategy.WaitStrategy;
+import com.inzynier.game.strategy.fight.QuadraShootStrategy;
+import com.inzynier.game.strategy.move.RandomWalkStrategy;
+import java.util.Comparator;
 
 public class Room {
 
@@ -62,6 +69,9 @@ public class Room {
         this.rightWall = new Texture("walls/wall_right.png");
         this.upWall = new Texture("walls/wall_up.png");
         this.downWall = new Texture("walls/wall_down.png");
+
+        ActorFactory.getActorFactory().createPlayerFollower().setPosition(new Vector2(Constants.toBox2d(MyGame.WIDTH) / 2 + 10, Constants.toBox2d(MyGame.HEIGHT) / 2 - 10))
+            .createBody(world);
     }
 
     public void setLayerFactory(LayerGeneratorInterface layerFactory) {
@@ -147,6 +157,13 @@ public class Room {
     }
 
     protected void renderObjects(Array<Body> array) {
+
+        array.sort(new Comparator<Body>() {
+            @Override
+            public int compare(Body o1, Body o2) {
+                return o1.getPosition().y == o2.getPosition().y ? 0 : (o1.getPosition().y > o2.getPosition().y ? -1 : 1);
+            }
+        });
 
         for (int i = 0; i < array.size; i++) {
             Object object = array.get(i).getUserData();

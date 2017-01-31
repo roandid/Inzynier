@@ -46,6 +46,7 @@ public class Actor implements DrawableInterface {
             FixtureDef fixtureDef
     ) {
         this.isPlayer = isPlayer;
+        this.health = health;
         this.player = character;
         this.strategy = strategy;
         this.bodyDef = bodyDef;
@@ -53,15 +54,19 @@ public class Actor implements DrawableInterface {
 
     }
 
-    public void createBody(World world) {
+    public Actor createBody(World world) {
         this.body = world.createBody(this.bodyDef);
         this.body.createFixture(this.fixtureDef);
         this.body.setUserData(this);
+
+        return this;
     }
 
-    public void setPosition(Vector2 position) {
+    public Actor setPosition(Vector2 position) {
         this.bodyDef.position.x = position.x;
         this.bodyDef.position.y = position.y;
+
+        return this;
     }
 
     @Override
@@ -73,7 +78,11 @@ public class Actor implements DrawableInterface {
     public void draw(SpriteBatch sb) {
         Vector2 position = this.body.getTransform().getPosition();
 
-        sb.draw(this.player, Constants.fromBox2d(position.x) - this.player.getWidth() / 2 + 15, Constants.fromBox2d(position.y) - this.player.getHeight() / 2 + 35);
+        sb.draw(
+                this.player,
+                Constants.fromBox2d(position.x) - this.player.getWidth() / 2 + 15,
+                Constants.fromBox2d(position.y) - this.player.getHeight() / 2 + 35
+        );
     }
 
     public Body getBody() {
@@ -103,7 +112,7 @@ public class Actor implements DrawableInterface {
     }
 
     public boolean isDead() {
-        return this.health <= 0;
+        return this.health <= 0.0;
     }
 
     public boolean isPlayer() {

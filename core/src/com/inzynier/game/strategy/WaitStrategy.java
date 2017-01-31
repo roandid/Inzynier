@@ -1,16 +1,15 @@
-package com.inzynier.game.strategy.fight;
+package com.inzynier.game.strategy;
 
 import com.badlogic.gdx.physics.box2d.World;
 import com.inzynier.game.entities.Actor;
-import com.inzynier.game.strategy.StrategyInterface;
 
-public class WaitFightStrategy implements StrategyInterface {
+public class WaitStrategy implements StrategyInterface {
 
     protected float time;
     protected float sum;
     protected StrategyInterface next;
 
-    public WaitFightStrategy(StrategyInterface next, float time) {
+    public WaitStrategy(StrategyInterface next, float time) {
         this.next = next;
         this.time = time;
         this.sum = 0;

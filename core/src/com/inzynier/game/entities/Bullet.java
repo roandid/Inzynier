@@ -36,4 +36,12 @@ public class Bullet implements DrawableInterface {
         Vector2 position = this.body.getPosition();
         sb.draw(this.texture, Constants.fromBox2d(position.x) - this.texture.getWidth() / 2 + 15, Constants.fromBox2d(position.y) - this.texture.getHeight() + 25);
     }
+
+    public Actor getOwner() {
+        return this.owner;
+    }
+
+    public Body getBody() {
+        return this.body;
+    }
 }
