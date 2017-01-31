@@ -7,8 +7,8 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.inzynier.game.Constants;
+import com.inzynier.game.entities.Actor;
 import com.inzynier.game.entities.Bullet;
-import com.inzynier.game.entities.FighterInterface;
 
 public class BulletGenerator {
 
@@ -22,13 +22,13 @@ public class BulletGenerator {
         return BulletGenerator.instance;
     }
 
-    public void generate(FighterInterface fighter, World world, Vector2 force) {
-        Body body = world.createBody(this.createBodyDef(fighter));
-        body.createFixture(this.createFixtureDef(fighter));
-        body.setUserData(new Bullet(body, force, fighter.getRangedWeaponTexture(), fighter));
+    public void generate(Actor actor, World world, Vector2 force) {
+        Body body = world.createBody(this.createBodyDef(actor));
+        body.createFixture(this.createFixtureDef(actor));
+        body.setUserData(new Bullet(body, force, actor.getRangedWeaponTexture(), actor));
     }
 
-    protected BodyDef createBodyDef(FighterInterface fighter) {
+    protected BodyDef createBodyDef(Actor fighter) {
         BodyDef bodyDef = new BodyDef();
 
         bodyDef.position.set(fighter.getPosition().x, fighter.getPosition().y);
@@ -39,7 +39,7 @@ public class BulletGenerator {
         return bodyDef;
     }
 
-    protected FixtureDef createFixtureDef(FighterInterface fighter) {
+    protected FixtureDef createFixtureDef(Actor fighter) {
         FixtureDef fixtureDef = new FixtureDef();
         PolygonShape shape = new PolygonShape();
 

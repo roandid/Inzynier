@@ -18,19 +18,15 @@ import com.inzynier.game.Constants;
 import com.inzynier.game.MyContactListener;
 import com.inzynier.game.MyGame;
 import com.inzynier.game.contact.ActionsDispatcher;
-import com.inzynier.game.contact.ContactHandlerInterface;
-import com.inzynier.game.contact.handlers.BulletContactHandler;
 import com.inzynier.game.entities.Doors;
 import com.inzynier.game.entities.DrawableInterface;
-import com.inzynier.game.entities.Player;
+import com.inzynier.game.entities.Actor;
 import com.inzynier.game.entities.Position;
 import com.inzynier.game.gameplay.map.LayerGeneratorInterface;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Room {
 
-    protected Player player;
+    protected Actor player;
     protected Doors doors;
     protected TiledMap map;
     protected OrthogonalTiledMapRenderer renderer;
@@ -41,7 +37,7 @@ public class Room {
     protected OrthographicCamera camera;
     protected Texture leftWall, rightWall, upWall, downWall;
 
-    public Room(String mapName, Player player, Doors doors, LayerGeneratorInterface layerFactory) {
+    public Room(String mapName, Actor player, Doors doors, LayerGeneratorInterface layerFactory) {
 
         this.player = player;
         this.doors = doors;
@@ -81,9 +77,13 @@ public class Room {
         for (int i = 0; i < array.size; i++) {
             Object object = array.get(i).getUserData();
 
-            if (object instanceof Player) {
-                world.destroyBody(array.get(i));
+            if (object instanceof Actor) {
+                if (((Actor) object).isPlayer()) {
+                    world.destroyBody(array.get(i));
+                }
+
             }
+
         }
     }
 

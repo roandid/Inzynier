@@ -1,14 +1,14 @@
 package com.inzynier.game.gameplay;
 
 import com.inzynier.game.entities.Doors;
-import com.inzynier.game.entities.Player;
+import com.inzynier.game.entities.Actor;
 import com.inzynier.game.entities.Position;
 import com.inzynier.game.gameplay.map.LayerGenerator;
 import com.inzynier.game.gameplay.map.LayerGeneratorInterface;
 
 public class Level {
 
-    protected Player player;
+    protected Actor player;
     protected LayerGeneratorInterface layerFactory;
     protected Room room;
 
@@ -17,7 +17,7 @@ public class Level {
      * na dany poziom, prefix do tekstur itd - możliwe że niektóre z tych rzeczy
      * powinniśmy przekazywać w init
      */
-    public Level(Player player) {
+    public Level(Actor player) {
         this.player = player;
         this.layerFactory = new LayerGenerator();
     }

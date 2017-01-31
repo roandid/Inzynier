@@ -3,7 +3,8 @@ package com.inzynier.game.screens;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.physics.box2d.Box2D;
 import com.inzynier.game.MyGame;
-import com.inzynier.game.entities.Player;
+import com.inzynier.game.entities.Actor;
+import com.inzynier.game.factory.ActorFactory;
 import com.inzynier.game.gameplay.Level;
 
 /**
@@ -12,7 +13,7 @@ import com.inzynier.game.gameplay.Level;
 public class GameplayScreen implements Screen {
 
     protected MyGame myGame;
-    protected Player player;
+    protected Actor player;
     protected Level level;
 
     public GameplayScreen(MyGame myGame) {
@@ -21,7 +22,7 @@ public class GameplayScreen implements Screen {
         Box2D.init();
 
         this.myGame = myGame;
-        this.player = new Player();
+        this.player = ActorFactory.getActorFactory().createPlayer();
         this.level = new Level(this.player);
         this.level.init();
     }
