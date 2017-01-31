@@ -11,7 +11,7 @@ import java.util.Random;
  *
  * @author mkoszowski
  */
-public class LevelGenerator {
+public class LevelController {
 
     private final int FREE_SPACE = 90;
     private final int BEGIN_ROOM = 10;
@@ -34,7 +34,7 @@ public class LevelGenerator {
     private int currentYPos = 0;
 
     //<editor-fold defaultstate="collapsed" desc="Konstruktor">
-    public LevelGenerator(int sizeField, int amountRoom, String map, LayerGeneratorInterface layerFactory, Player player) {
+    public LevelController(int sizeField, int amountRoom, String map, LayerGeneratorInterface layerFactory, Player player) {
         this.currentAmountRoom = 0;
         this.sizeField = sizeField;
         this.amountRoom = amountRoom;
@@ -42,12 +42,12 @@ public class LevelGenerator {
         this.layerFactor = layerFactory;
         this.listDoors = new ArrayList<Doors>();
         this.player = player;
-        this.generate();
+        this.init();
     }
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="generate - generuje mapę liczbowa -> normalna">
-    private void generate() {
+    private void init() {
         this.rooms = new Room[this.sizeField][this.sizeField];
         this.generateNumberMap();
         this.generateRealMap();

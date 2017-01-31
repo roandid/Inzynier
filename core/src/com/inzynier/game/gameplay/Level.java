@@ -11,7 +11,7 @@ public class Level {
     protected Player player;
     protected LayerGeneratorInterface layerFactory;
     protected Room room;
-    protected LevelGenerator generator;
+    protected LevelController generator;
 
     /**
      * Prawdopodobnie powinna być przekazana dodatkowo lista dostępnych stworków
@@ -22,7 +22,7 @@ public class Level {
         this.player = player;
         this.layerFactory = new LayerGenerator();
         //Tworzy się generator a w nim tablica z pokojami 
-        this.generator = new LevelGenerator(sizeField, amountRoom, "maps/tester.tmx", this.layerFactory, player);
+        this.generator = new LevelController(sizeField, amountRoom, "maps/tester.tmx", this.layerFactory, player);
     }
 
     public void init() {
