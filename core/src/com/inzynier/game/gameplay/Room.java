@@ -30,6 +30,11 @@ import java.util.List;
 
 public class Room {
 
+    public enum RoomType {
+        BEGIN_ROOM, NORMAL_ROOM,
+        BOSS_ROOM, TREASURE_ROOM, HIDDEN_ROOM
+    }
+    
     protected Player player;
     protected Doors doors;
     protected TiledMap map;
@@ -41,12 +46,15 @@ public class Room {
     protected OrthographicCamera camera;
     protected Texture leftWall, rightWall, upWall, downWall;
 
-    public Room(String mapName, Player player, Doors doors, LayerGeneratorInterface layerFactory) {
+    protected RoomType type;
+    
+    public Room(String mapName, Player player, Doors doors, LayerGeneratorInterface layerFactory, RoomType roomType) {
 
         this.player = player;
         this.doors = doors;
         this.layerFactory = layerFactory;
-
+        this.type = roomType;
+        
         this.map = new TmxMapLoader().load(mapName);
         this.renderer = new OrthogonalTiledMapRenderer(map);
         this.world = new World(new Vector2(0, 0), true);
@@ -61,6 +69,14 @@ public class Room {
         this.downWall = new Texture("walls/wall_down.png");
     }
 
+    public void setLayerFactory(LayerGeneratorInterface layerFactory) {
+        this.layerFactory = layerFactory;
+    }
+
+    public RoomType getType() {
+        return type;
+    }
+    
     public void init() {
         this.spriteBatch.setProjectionMatrix(this.camera.combined);
         int tileSize = (Integer) map.getProperties().get("tilewidth");
