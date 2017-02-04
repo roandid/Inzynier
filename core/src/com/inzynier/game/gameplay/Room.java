@@ -23,9 +23,11 @@ import com.inzynier.game.contact.actions.DestroyAction;
 import com.inzynier.game.entities.objects.Blocker;
 import com.inzynier.game.entities.Doors;
 import com.inzynier.game.entities.DrawableInterface;
-import com.inzynier.game.entities.Player;
+import com.inzynier.game.entities.Actor;
 import com.inzynier.game.entities.Position;
+import com.inzynier.game.factory.ActorFactory;
 import com.inzynier.game.gameplay.map.LayerGeneratorInterface;
+import java.util.Comparator;
 import com.inzynier.game.gameplay.map.ObjectGeneratorInterface;
 
 import java.util.ArrayList;
@@ -36,8 +38,8 @@ public class Room {
         BEGIN_ROOM, NORMAL_ROOM,
         BOSS_ROOM, TREASURE_ROOM, HIDDEN_ROOM
     }
-    
-    protected Player player;
+
+    protected Actor player;
     protected Doors doors;
     protected TiledMap map;
     protected OrthogonalTiledMapRenderer renderer;
@@ -46,24 +48,21 @@ public class Room {
     protected SpriteBatch spriteBatch;
     protected LayerGeneratorInterface layerFactory;
     protected OrthographicCamera camera;
+    protected RoomType type;
     protected Texture leftWall, rightWall, upWall, downWall, ground;
     protected ObjectGeneratorInterface objectFactory;
     protected ArrayList<Blocker> listOfBlockers;
     //debug
     BitmapFont font = new BitmapFont();
 
-    protected RoomType type;
-
-
-    public Room(String mapName, Player player, Doors doors, LayerGeneratorInterface layerFactory,
-                ObjectGeneratorInterface objectFactory, RoomType roomType) {
-
+    public Room(String mapName, Actor player, Doors doors, LayerGeneratorInterface layerFactory,
+        ObjectGeneratorInterface objectFactory, RoomType roomType) {
 
         this.player = player;
         this.doors = doors;
         this.layerFactory = layerFactory;
         this.type = roomType;
-        
+
         this.objectFactory = objectFactory;
 
         this.map = new TmxMapLoader().load(mapName);
@@ -78,9 +77,10 @@ public class Room {
         this.rightWall = new Texture("walls/wall_right.png");
         this.upWall = new Texture("walls/wall_up.png");
         this.downWall = new Texture("walls/wall_down.png");
+
+        ActorFactory.getActorFactory().createPlayerFollower().setPosition(new Vector2(Constants.toBox2d(MyGame.WIDTH) / 2 + 10, Constants.toBox2d(MyGame.HEIGHT) / 2 - 10))
+            .createBody(world);
         this.ground = new Texture("walls/ground.png");
-
-
     }
 
     public void setLayerFactory(LayerGeneratorInterface layerFactory) {
@@ -90,24 +90,21 @@ public class Room {
     public RoomType getType() {
         return type;
     }
-    
+
     public void init() {
         this.spriteBatch.setProjectionMatrix(this.camera.combined);
         int tileSize = (Integer) map.getProperties().get("tilewidth");
-
 
         this.layerFactory.generateLayer(this.world, (TiledMapTileLayer) this.map.getLayers().get("ground"), Constants.BIT_GROUND, tileSize);
         this.layerFactory.generateLayer(this.world, (TiledMapTileLayer) this.map.getLayers().get("player_wall"), Constants.BIT_WALL_PLAYER, tileSize);
         this.layerFactory.generateLayer(this.world, (TiledMapTileLayer) this.map.getLayers().get("bullet_wall"), Constants.BIT_WALL_BULLET, tileSize);
         this.layerFactory.generateLayer(this.world, (TiledMapTileLayer) this.map.getLayers().get("door"), Constants.BIT_DOOR, tileSize);
 
-
         this.objectFactory.generateObject(this.world, map.getLayers().get("block_up"), Constants.BIT_BLOCKER, 32, 32);
-        this.objectFactory.generateObject(this.world, map.getLayers().get("block_down"), Constants.BIT_BLOCKER, 32 , 32);
+        this.objectFactory.generateObject(this.world, map.getLayers().get("block_down"), Constants.BIT_BLOCKER, 32, 32);
         this.objectFactory.generateObject(this.world, map.getLayers().get("block_right"), Constants.BIT_BLOCKER, 32, 32);
         this.objectFactory.generateObject(this.world, map.getLayers().get("block_left"), Constants.BIT_BLOCKER, 32, 32);
     }
-
 
     public void wakeUp(Position position) {
         // Ustawić gracza zgodnie z pozycja - w tym wypadku wyjątkowo na środku
@@ -121,9 +118,13 @@ public class Room {
         for (int i = 0; i < array.size; i++) {
             Object object = array.get(i).getUserData();
 
-            if (object instanceof Player) {
-                world.destroyBody(array.get(i));
+            if (object instanceof Actor) {
+                if (((Actor) object).isPlayer()) {
+                    world.destroyBody(array.get(i));
+                }
+
             }
+
         }
     }
 
@@ -151,22 +152,19 @@ public class Room {
         spriteBatch.draw(ground, 128, 128, MyGame.WIDTH - 256, 640);
 
         font.draw(spriteBatch, "X:" + player.getPosition().x + " Y:" + player.getPosition().y,
-                20, MyGame.HEIGHT - 20);
+            20, MyGame.HEIGHT - 20);
 
         this.renderObjects(array);
         this.spriteBatch.end();
         b2dr.render(world, camera.combined);
         checkPlayerPosition();
 
+        //przy okreslonym warunku zniszczyc okreslone blokery
+        Array<Body> blockers = getBlockers();
 
-       //przy okreslonym warunku zniszczyc okreslone blokery
-            Array<Body> blockers = getBlockers();
-
-            for(Body body : blockers) {
-                ActionsDispatcher.addAction(new DestroyAction(body));
-            }
-
-
+        for (Body body : blockers) {
+            ActionsDispatcher.addAction(new DestroyAction(body));
+        }
 
     }
 
@@ -186,18 +184,19 @@ public class Room {
         return resultArray;
     }
 //todo na podstawie map controllera
+
     private void checkPlayerPosition() {
         if (player.getPosition().y > 40) {
             //controller.newRoom(UP)
         }
-        if(player.getPosition().x < 1){
+        if (player.getPosition().x < 1) {
             //controller.newRoom(LEFT)
         }
-        if(player.getPosition().x > 58){
+        if (player.getPosition().x > 58) {
             //controller.newRoom(RIGHT)
         }
-        if(player.getPosition().y < 4) {
-           // controller.newRomm(DOWN)
+        if (player.getPosition().y < 4) {
+            // controller.newRomm(DOWN)
         }
     }
 
@@ -219,6 +218,13 @@ public class Room {
     }
 
     protected void renderObjects(Array<Body> array) {
+
+        array.sort(new Comparator<Body>() {
+            @Override
+            public int compare(Body o1, Body o2) {
+                return o1.getPosition().y == o2.getPosition().y ? 0 : (o1.getPosition().y > o2.getPosition().y ? -1 : 1);
+            }
+        });
 
         for (int i = 0; i < array.size; i++) {
             Object object = array.get(i).getUserData();

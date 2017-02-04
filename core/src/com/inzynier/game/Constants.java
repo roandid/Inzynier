@@ -17,7 +17,8 @@ public class Constants {
     public static final short BIT_WALL_BULLET = 16;
     public static final short BIT_DOOR = 32;
     public static final short BIT_BLOCKER = 64;
-
+    public static final short BIT_ENEMY = 128;
+    public static final short BIT_BULLET = 256;
 
     public static float toBox2d(float x) {
         return x / Constants.SCALE;

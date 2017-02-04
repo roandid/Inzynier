@@ -1,7 +1,7 @@
 package com.inzynier.game.gameplay;
 
 import com.inzynier.game.entities.Doors;
-import com.inzynier.game.entities.Player;
+import com.inzynier.game.entities.Actor;
 import com.inzynier.game.entities.Position;
 import com.inzynier.game.gameplay.map.LayerGeneratorInterface;
 import com.inzynier.game.gameplay.map.ObjectGeneratorInterface;
@@ -27,7 +27,7 @@ public class LevelController {
     private int amountRoom;
     private int currentAmountRoom;
     private String map;
-    private Player player;
+    private Actor player;
     private int[][] numberRooms;
     private int[][] numberRoomsNoAmount;
     private Room[][] rooms;
@@ -37,10 +37,13 @@ public class LevelController {
     private int currentXPos = 0;
     private int currentYPos = 0;
 
-    //<editor-fold defaultstate="collapsed" desc="Konstruktor">
-    public LevelController(int sizeField, int amountRoom, String map,
-                           LayerGeneratorInterface layerFactory,
-                           ObjectGeneratorInterface objectFactory, Player player) {
+    public LevelController(int sizeField,
+        int amountRoom,
+        String map,
+        LayerGeneratorInterface layerFactory,
+        ObjectGeneratorInterface objectFactory,
+        Actor player
+    ) {
         this.currentAmountRoom = 0;
         this.sizeField = sizeField;
         this.amountRoom = amountRoom;
@@ -75,29 +78,28 @@ public class LevelController {
         return this.getCurrentRoom();
     }
 
-    //<editor-fold defaultstate="collapsed" desc="move - poruszanie się po tablicy">
     public Room moveNorth() {
         this.getCurrentRoom().sleep();
         this.currentXPos++;
         this.getCurrentRoom().wakeUp(Position.DOWN);
         return this.getCurrentRoom();
     }
-    
+
     public Room moveSouth() {
         this.getCurrentRoom().sleep();
         this.currentXPos--;
         this.getCurrentRoom().wakeUp(Position.UP);
         return this.getCurrentRoom();
     }
-    
+
     public Room moveEast() {
         this.getCurrentRoom().sleep();
         this.currentYPos++;
         this.getCurrentRoom().wakeUp(Position.LEFT);
         return this.getCurrentRoom();
     }
-    public Room moveWest()
-    {
+
+    public Room moveWest() {
         this.getCurrentRoom().sleep();
         this.currentYPos--;
         this.getCurrentRoom().wakeUp(Position.RIGHT);
@@ -126,16 +128,16 @@ public class LevelController {
                     this.rooms[i][j] = null;
                 } else if (this.numberRoomsNoAmount[i][j] == this.NORMAL_ROOM) {
                     this.rooms[i][j] = new Room(this.map, this.player, this.listDoors.get(counterDoorList++),
-                            this.layerFactor, this.objectFactor, Room.RoomType.NORMAL_ROOM);
+                        this.layerFactor, this.objectFactor, Room.RoomType.NORMAL_ROOM);
                 } else if (this.numberRoomsNoAmount[i][j] == this.BOSS_ROOM) {
                     this.rooms[i][j] = new Room(this.map, this.player, this.listDoors.get(counterDoorList++),
-                            this.layerFactor, this.objectFactor, Room.RoomType.BOSS_ROOM);
+                        this.layerFactor, this.objectFactor, Room.RoomType.BOSS_ROOM);
                 } else if (this.numberRoomsNoAmount[i][j] == this.TREASURE_ROOM) {
                     this.rooms[i][j] = new Room(this.map, this.player, this.listDoors.get(counterDoorList++),
-                            this.layerFactor, this.objectFactor, Room.RoomType.TREASURE_ROOM);
+                        this.layerFactor, this.objectFactor, Room.RoomType.TREASURE_ROOM);
                 } else if ((this.numberRoomsNoAmount[i][j] == this.BEGIN_ROOM)) {
                     this.rooms[i][j] = new Room(this.map, this.player, this.listDoors.get(counterDoorList++),
-                            this.layerFactor,  this.objectFactor, Room.RoomType.BEGIN_ROOM);
+                        this.layerFactor, this.objectFactor, Room.RoomType.BEGIN_ROOM);
                 }
                 if (this.rooms[i][j] != null) {
                     this.rooms[i][j].init();
