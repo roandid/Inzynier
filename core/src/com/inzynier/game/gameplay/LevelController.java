@@ -2,7 +2,10 @@ package com.inzynier.game.gameplay;
 
 import com.inzynier.game.entities.Doors;
 import com.inzynier.game.entities.Player;
+import com.inzynier.game.entities.Position;
 import com.inzynier.game.gameplay.map.LayerGeneratorInterface;
+import com.inzynier.game.gameplay.map.ObjectGeneratorInterface;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -30,16 +33,20 @@ public class LevelController {
     private Room[][] rooms;
     private ArrayList<Doors> listDoors;
     private LayerGeneratorInterface layerFactor;
+    private ObjectGeneratorInterface objectFactor;
     private int currentXPos = 0;
     private int currentYPos = 0;
 
     //<editor-fold defaultstate="collapsed" desc="Konstruktor">
-    public LevelController(int sizeField, int amountRoom, String map, LayerGeneratorInterface layerFactory, Player player) {
+    public LevelController(int sizeField, int amountRoom, String map,
+                           LayerGeneratorInterface layerFactory,
+                           ObjectGeneratorInterface objectFactory, Player player) {
         this.currentAmountRoom = 0;
         this.sizeField = sizeField;
         this.amountRoom = amountRoom;
         this.map = map;
         this.layerFactor = layerFactory;
+        this.objectFactor = objectFactory;
         this.listDoors = new ArrayList<Doors>();
         this.player = player;
         this.init();
@@ -55,25 +62,46 @@ public class LevelController {
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="getCurrentRoom - zwraca obecn pokój">
-    public Room getCurrentRoom() {
+    private Room getCurrentRoom() {
         return this.rooms[this.currentXPos][this.currentYPos];
     }
     //</editor-fold>
-    
+
+    public Room getBeginRoom() {
+        this.currentXPos = this.sizeField / 2;
+        this.currentYPos = this.sizeField / 2;
+        //center
+        this.getCurrentRoom().wakeUp(Position.LEFT);
+        return this.getCurrentRoom();
+    }
+
     //<editor-fold defaultstate="collapsed" desc="move - poruszanie się po tablicy">
-    public void moveNorth() {
+    public Room moveNorth() {
+        this.getCurrentRoom().sleep();
         this.currentXPos++;
+        this.getCurrentRoom().wakeUp(Position.DOWN);
+        return this.getCurrentRoom();
     }
     
-    public void moveSouth() {
+    public Room moveSouth() {
+        this.getCurrentRoom().sleep();
         this.currentXPos--;
+        this.getCurrentRoom().wakeUp(Position.UP);
+        return this.getCurrentRoom();
     }
     
-    public void moveEast() {
+    public Room moveEast() {
+        this.getCurrentRoom().sleep();
         this.currentYPos++;
+        this.getCurrentRoom().wakeUp(Position.LEFT);
+        return this.getCurrentRoom();
     }
-    public void moveWest() {
+    public Room moveWest()
+    {
+        this.getCurrentRoom().sleep();
         this.currentYPos--;
+        this.getCurrentRoom().wakeUp(Position.RIGHT);
+        return this.getCurrentRoom();
     }
     //</editor-fold>
 
@@ -97,13 +125,21 @@ public class LevelController {
                 if ((this.numberRoomsNoAmount[i][j] == this.FREE_SPACE) || (this.numberRoomsNoAmount[i][j] == this.HIDDEN_ROOM)) {
                     this.rooms[i][j] = null;
                 } else if (this.numberRoomsNoAmount[i][j] == this.NORMAL_ROOM) {
-                    this.rooms[i][j] = new Room(this.map, this.player, this.listDoors.get(counterDoorList++), this.layerFactor, Room.RoomType.NORMAL_ROOM);
+                    this.rooms[i][j] = new Room(this.map, this.player, this.listDoors.get(counterDoorList++),
+                            this.layerFactor, this.objectFactor, Room.RoomType.NORMAL_ROOM);
                 } else if (this.numberRoomsNoAmount[i][j] == this.BOSS_ROOM) {
-                    this.rooms[i][j] = new Room(this.map, this.player, this.listDoors.get(counterDoorList++), this.layerFactor, Room.RoomType.BOSS_ROOM);
+                    this.rooms[i][j] = new Room(this.map, this.player, this.listDoors.get(counterDoorList++),
+                            this.layerFactor, this.objectFactor, Room.RoomType.BOSS_ROOM);
                 } else if (this.numberRoomsNoAmount[i][j] == this.TREASURE_ROOM) {
-                    this.rooms[i][j] = new Room(this.map, this.player, this.listDoors.get(counterDoorList++), this.layerFactor, Room.RoomType.TREASURE_ROOM);
+                    this.rooms[i][j] = new Room(this.map, this.player, this.listDoors.get(counterDoorList++),
+                            this.layerFactor, this.objectFactor, Room.RoomType.TREASURE_ROOM);
                 } else if ((this.numberRoomsNoAmount[i][j] == this.BEGIN_ROOM)) {
-                    this.rooms[i][j] = new Room(this.map, this.player, this.listDoors.get(counterDoorList++), this.layerFactor, Room.RoomType.BEGIN_ROOM);
+                    this.rooms[i][j] = new Room(this.map, this.player, this.listDoors.get(counterDoorList++),
+                            this.layerFactor,  this.objectFactor, Room.RoomType.BEGIN_ROOM);
+                }
+                if (this.rooms[i][j] != null) {
+                    this.rooms[i][j].init();
+
                 }
             }
         }

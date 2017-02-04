@@ -26,7 +26,7 @@ public class Player implements DrawableInterface, MovableInterface, FighterInter
     protected FightStrategyInterface fightStrategy;
 
     public Player() {
-        this.player = new Texture("issac.png");
+        this.player = new Texture("player2.png");
         this.bullet = new Texture("tear.png");
         this.bodyDef = new BodyDef();
         this.fixtureDef = new FixtureDef();
@@ -58,7 +58,7 @@ public class Player implements DrawableInterface, MovableInterface, FighterInter
     public void draw(SpriteBatch sb) {
         Vector2 position = this.body.getTransform().getPosition();
 
-        sb.draw(this.player, Constants.fromBox2d(position.x) - this.player.getWidth() / 2 + 15, Constants.fromBox2d(position.y) - this.player.getHeight() / 2 + 35);
+        sb.draw(this.player, Constants.fromBox2d(position.x) - this.player.getWidth() / 2 , Constants.fromBox2d(position.y) - this.player.getHeight() / 2 );
     }
 
     @Override
@@ -99,6 +99,6 @@ public class Player implements DrawableInterface, MovableInterface, FighterInter
         this.fixtureDef.shape = shape;
         this.fixtureDef.friction = 0.5f;
         this.fixtureDef.filter.categoryBits = Constants.BIT_PLAYER;
-        this.fixtureDef.filter.maskBits = Constants.BIT_WALL;
+        this.fixtureDef.filter.maskBits = Constants.BIT_WALL_PLAYER | Constants.BIT_BLOCKER;
     }
 }

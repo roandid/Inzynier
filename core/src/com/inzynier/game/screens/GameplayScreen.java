@@ -22,7 +22,7 @@ public class GameplayScreen implements Screen {
 
         this.myGame = myGame;
         this.player = new Player();
-        this.level = new Level(this.player, 10, 60);
+        this.level = new Level(this.player, 10, 5);
         this.level.init();
     }
 

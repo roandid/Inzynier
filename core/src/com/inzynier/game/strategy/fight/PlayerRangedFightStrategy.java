@@ -61,7 +61,7 @@ public class PlayerRangedFightStrategy implements FightStrategyInterface {
         shape.setAsBox(Constants.toBox2d(fighter.getRangedWeaponTexture().getWidth()), Constants.toBox2d(fighter.getRangedWeaponTexture().getHeight()));
         fixtureDef.shape = shape;
         fixtureDef.filter.categoryBits = Constants.BIT_PLAYER;
-        fixtureDef.filter.maskBits = Constants.BIT_WALL;
+        fixtureDef.filter.maskBits = Constants.BIT_WALL_BULLET;
 
         return fixtureDef;
     }

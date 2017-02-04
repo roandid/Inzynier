@@ -13,7 +13,11 @@ public class Constants {
     //u�ywane do filtrowania kolizji
     public static final short BIT_PLAYER = 2;
     public static final short BIT_GROUND = 4;
-    public static final short BIT_WALL = 8;
+    public static final short BIT_WALL_PLAYER = 8;
+    public static final short BIT_WALL_BULLET = 16;
+    public static final short BIT_DOOR = 32;
+    public static final short BIT_BLOCKER = 64;
+
 
     public static float toBox2d(float x) {
         return x / Constants.SCALE;
