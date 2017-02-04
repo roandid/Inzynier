@@ -1,14 +1,16 @@
 package com.inzynier.game.gameplay;
 
 import com.inzynier.game.entities.Actor;
-import com.inzynier.game.entities.Position;
 import com.inzynier.game.gameplay.map.LayerGenerator;
 import com.inzynier.game.gameplay.map.LayerGeneratorInterface;
+import com.inzynier.game.gameplay.map.ObjectGenerator;
+import com.inzynier.game.gameplay.map.ObjectGeneratorInterface;
 
 public class Level {
 
     protected Actor player;
     protected LayerGeneratorInterface layerFactory;
+    protected ObjectGeneratorInterface objectFactory;
     protected Room room;
     protected LevelController levelController;
 
@@ -20,18 +22,21 @@ public class Level {
     public Level(Actor player, int sizeField, int amountRoom) {
         this.player = player;
         this.layerFactory = new LayerGenerator();
-        //Tworzy się generator a w nim tablica z pokojami
-        this.levelController = new LevelController(sizeField, amountRoom, "maps/tester.tmx", this.layerFactory, player);
+        this.objectFactory = new ObjectGenerator();
+        this.levelController = new LevelController(
+            sizeField,
+            amountRoom,
+            "maps/tester.tmx",
+            this.layerFactory,
+            this.objectFactory, player
+        );
     }
 
     public void init() {
-        // Rozmieszczenie wszystkich pomieszczeń itd
-        //Pobranie obecnego pokoju
-        this.room = this.levelController.getCurrentRoom();
-
         //jakaś magia
-        this.room.init();
-        this.room.wakeUp(Position.DOWN);
+        this.room = this.levelController.getBeginRoom();
+        //this.room.addListener()
+        this.room = this.levelController.moveEast();
 
         //Potrzebny jest słuchacz gdzie wlezie postać i rakcja generatora na to
         //czyli przemieszczenie obecnego pokoju i ponowne go pobranie
@@ -41,4 +46,5 @@ public class Level {
     public void run(float dt) {
         this.room.run(dt);
     }
+
 }

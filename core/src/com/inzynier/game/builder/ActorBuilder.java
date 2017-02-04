@@ -79,14 +79,14 @@ public class ActorBuilder {
 
     public Actor build() {
         Actor actor = new Actor(
-                this.isPlayer,
-                this.health,
-                this.mainTexture,
-                this.stragegy,
-                this.bodyDef,
-                this.fixtureDef,
-                this.bulletTexture,
-                this.power
+            this.isPlayer,
+            this.health,
+            this.mainTexture,
+            this.stragegy,
+            this.bodyDef,
+            this.fixtureDef,
+            this.bulletTexture,
+            this.power
         );
 
         this.reset();
@@ -110,7 +110,7 @@ public class ActorBuilder {
         fixtureDef.shape = shape;
         fixtureDef.friction = 0.5f;
         fixtureDef.filter.categoryBits = Constants.BIT_ENEMY;
-        fixtureDef.filter.maskBits = Constants.BIT_WALL | Constants.BIT_BULLET;
+        fixtureDef.filter.maskBits = Constants.BIT_WALL_PLAYER | Constants.BIT_BULLET;
 
         return fixtureDef;
     }
