@@ -7,5 +7,5 @@ public interface DrawableInterface {
 
     public void update(float dt, World world);
 
-    public void draw(SpriteBatch sb);
+    public void draw(float dt, SpriteBatch sb);
 }

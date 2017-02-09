@@ -32,7 +32,7 @@ public class Bullet implements DrawableInterface {
     }
 
     @Override
-    public void draw(SpriteBatch sb) {
+    public void draw(float dt, SpriteBatch sb) {
         Vector2 position = this.body.getPosition();
         sb.draw(this.texture, Constants.fromBox2d(position.x) - this.texture.getWidth() / 2 + 15, Constants.fromBox2d(position.y) - this.texture.getHeight() + 25);
     }

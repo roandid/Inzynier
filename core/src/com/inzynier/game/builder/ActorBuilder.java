@@ -1,11 +1,13 @@
 package com.inzynier.game.builder;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.inzynier.game.Constants;
 import com.inzynier.game.entities.Actor;
+import com.inzynier.game.entities.AnimationsStorage;
 import com.inzynier.game.strategy.DummyStrategy;
 import com.inzynier.game.strategy.StrategyInterface;
 
@@ -14,7 +16,7 @@ public class ActorBuilder {
     protected boolean isPlayer;
     protected float health;
     protected float power;
-    protected Texture mainTexture;
+    protected String atlasPath;
     protected Texture bulletTexture;
     protected BodyDef bodyDef;
     protected FixtureDef fixtureDef;
@@ -47,8 +49,8 @@ public class ActorBuilder {
         return this;
     }
 
-    public ActorBuilder setMainTexture(Texture mainTexture) {
-        this.mainTexture = mainTexture;
+    public ActorBuilder setAtlasPath(String path) {
+        this.atlasPath = path;
 
         return this;
     }
@@ -81,7 +83,7 @@ public class ActorBuilder {
         Actor actor = new Actor(
             this.isPlayer,
             this.health,
-            this.mainTexture,
+            new AnimationsStorage(new TextureAtlas(this.atlasPath)),
             this.stragegy,
             this.bodyDef,
             this.fixtureDef,
@@ -92,6 +94,12 @@ public class ActorBuilder {
         this.reset();
 
         return actor;
+    }
+
+    public ActorBuilder setSize(int x, int y) {
+        ((PolygonShape) this.fixtureDef.shape).setAsBox(Constants.toBox2d(x), Constants.toBox2d(y));
+
+        return this;
     }
 
     private BodyDef createDefaultBodyDef() {

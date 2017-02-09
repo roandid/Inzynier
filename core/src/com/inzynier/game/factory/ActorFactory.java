@@ -8,6 +8,7 @@ import com.inzynier.game.strategy.WaitStrategy;
 import com.inzynier.game.strategy.fight.PlayerRangedFightStrategy;
 import com.inzynier.game.strategy.fight.QuadraShootStrategy;
 import com.inzynier.game.strategy.fight.SpawnWalkerStrategy;
+import com.inzynier.game.strategy.move.AnimatedWalkStrategy;
 import com.inzynier.game.strategy.move.PlayerMoveStrategy;
 import com.inzynier.game.strategy.move.RandomWalkStrategy;
 import com.inzynier.game.strategy.move.WalkToPlayerStrategy;
@@ -21,23 +22,20 @@ public class ActorFactory {
     public Actor createPlayer() {
         return ActorBuilder.getActorBuilder()
             .setIsPlayer(true)
-            .setMainTexture(new Texture("issac.png"))
+            .setAtlasPath("postac.txt")
             .setBulletTexture(new Texture("tear.png"))
             .setStragegy(new DoubleStrategy(new PlayerMoveStrategy(), new PlayerRangedFightStrategy()))
             .setPower(100)
+            .setSize(22, 30)
             .build();
     }
 
-    public Actor createSpawner() {
+    public Actor createBroccoli() {
         return ActorBuilder.getActorBuilder()
-            .setPower(100)
-            .setMainTexture(new Texture("knight.png"))
+            .setAtlasPath("brokul.txt")
             .setBulletTexture(new Texture("tear.png"))
             .setStragegy(
-                new DoubleStrategy(
-                    new RandomWalkStrategy(3, 1),
-                    new WaitStrategy(new SpawnWalkerStrategy(), 3.5f)
-                )
+                new AnimatedWalkStrategy(new WalkToPlayerStrategy(400))
             )
             .build();
     }
@@ -45,7 +43,7 @@ public class ActorFactory {
     public Actor createRandomWalker() {
         return ActorBuilder.getActorBuilder()
             .setPower(100)
-            .setMainTexture(new Texture("knight.png"))
+            //            .setMainTexture(new Texture("knight.png"))
             .setBulletTexture(new Texture("tear.png"))
             .setStragegy(
                 new DoubleStrategy(
@@ -59,7 +57,7 @@ public class ActorFactory {
     public Actor createPlayerFollower() {
         return ActorBuilder.getActorBuilder()
             .setPower(100)
-            .setMainTexture(new Texture("knight.png"))
+            //            .setMainTexture(new Texture("knight.png"))
             .setBulletTexture(new Texture("tear.png"))
             .setStragegy(
                 new DoubleStrategy(

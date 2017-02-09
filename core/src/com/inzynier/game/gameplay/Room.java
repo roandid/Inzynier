@@ -78,7 +78,7 @@ public class Room {
         this.upWall = new Texture("walls/wall_up.png");
         this.downWall = new Texture("walls/wall_down.png");
 
-        ActorFactory.getActorFactory().createPlayerFollower().setPosition(new Vector2(Constants.toBox2d(MyGame.WIDTH) / 2 + 10, Constants.toBox2d(MyGame.HEIGHT) / 2 - 10))
+        ActorFactory.getActorFactory().createBroccoli().setPosition(new Vector2(Constants.toBox2d(MyGame.WIDTH) / 2 + 10, Constants.toBox2d(MyGame.HEIGHT) / 2 - 10))
             .createBody(world);
         this.ground = new Texture("walls/ground.png");
     }
@@ -154,7 +154,7 @@ public class Room {
         font.draw(spriteBatch, "X:" + player.getPosition().x + " Y:" + player.getPosition().y,
             20, MyGame.HEIGHT - 20);
 
-        this.renderObjects(array);
+        this.renderObjects(dt, array);
         this.spriteBatch.end();
         b2dr.render(world, camera.combined);
         checkPlayerPosition();
@@ -217,7 +217,7 @@ public class Room {
         }
     }
 
-    protected void renderObjects(Array<Body> array) {
+    protected void renderObjects(float dt, Array<Body> array) {
 
         array.sort(new Comparator<Body>() {
             @Override
@@ -230,7 +230,7 @@ public class Room {
             Object object = array.get(i).getUserData();
 
             if (object instanceof DrawableInterface) {
-                ((DrawableInterface) object).draw(this.spriteBatch);
+                ((DrawableInterface) object).draw(dt, this.spriteBatch);
             }
         }
     }
