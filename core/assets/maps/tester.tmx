@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="20" height="14" tilewidth="64" tileheight="64" nextobjectid="16">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="20" height="14" tilewidth="64" tileheight="64" nextobjectid="34">
  <tileset firstgid="1" name="kafelken" tilewidth="32" tileheight="32" tilecount="4" columns="4">
   <image source="kafelken.png" width="128" height="32"/>
+ </tileset>
+ <tileset firstgid="5" name="klocek" tilewidth="64" tileheight="64" tilecount="1" columns="1">
+  <image source="../../../../klocek.png" width="64" height="64"/>
  </tileset>
  <layer name="ground" width="20" height="14">
   <data encoding="base64">
@@ -38,5 +41,19 @@
  <objectgroup name="block_right">
   <object id="12" x="1152" y="384" width="64" height="64"/>
   <object id="13" x="1152" y="448" width="64" height="64"/>
+ </objectgroup>
+ <objectgroup name="lego">
+  <object id="16" x="256" y="256" width="64" height="64"/>
+  <object id="23" x="256" y="320" width="64" height="64"/>
+  <object id="24" x="320" y="256" width="64" height="64"/>
+  <object id="25" x="896" y="576" width="64" height="64"/>
+  <object id="26" x="256" y="512" width="64" height="64"/>
+  <object id="27" x="320" y="576" width="64" height="64"/>
+  <object id="28" x="256" y="576" width="64" height="64"/>
+  <object id="29" x="960" y="512" width="64" height="64"/>
+  <object id="30" x="960" y="576" width="64" height="64"/>
+  <object id="31" x="960" y="320" width="64" height="64"/>
+  <object id="32" x="896" y="256" width="64" height="64"/>
+  <object id="33" x="960" y="256" width="64" height="64"/>
  </objectgroup>
 </map>

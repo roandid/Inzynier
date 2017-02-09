@@ -9,6 +9,7 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.inzynier.game.Constants;
 import com.inzynier.game.entities.objects.Blocker;
+import com.inzynier.game.entities.objects.LegoBlock;
 import com.inzynier.game.entities.objects.TiledObject;
 
 /**
@@ -50,6 +51,7 @@ public class ObjectGenerator implements ObjectGeneratorInterface {
 
     private TiledObject makeObject(Body body, short bits) {
         if(bits == Constants.BIT_BLOCKER) return new Blocker(body);
+        else if(bits == Constants.BIT_LEGO) return new LegoBlock(body);
         else return null;
     }
 }

@@ -118,7 +118,7 @@ public class ActorBuilder {
         fixtureDef.shape = shape;
         fixtureDef.friction = 0.5f;
         fixtureDef.filter.categoryBits = Constants.BIT_ENEMY;
-        fixtureDef.filter.maskBits = Constants.BIT_WALL_PLAYER | Constants.BIT_BULLET;
+        fixtureDef.filter.maskBits = Constants.BIT_WALL_PLAYER | Constants.BIT_BULLET | Constants.BIT_LEGO;
 
         return fixtureDef;
     }

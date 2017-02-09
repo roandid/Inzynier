@@ -104,6 +104,9 @@ public class Room {
         this.objectFactory.generateObject(this.world, map.getLayers().get("block_down"), Constants.BIT_BLOCKER, 32, 32);
         this.objectFactory.generateObject(this.world, map.getLayers().get("block_right"), Constants.BIT_BLOCKER, 32, 32);
         this.objectFactory.generateObject(this.world, map.getLayers().get("block_left"), Constants.BIT_BLOCKER, 32, 32);
+        this.objectFactory.generateObject(this.world, map.getLayers().get("lego"), Constants.BIT_LEGO, 32, 32);
+
+
     }
 
     public void wakeUp(Position position) {
