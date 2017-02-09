@@ -1,7 +1,7 @@
 package com.inzynier.game;
 
 import com.badlogic.gdx.Game;
-import com.inzynier.game.screens.GameplayScreen;
+import com.inzynier.game.screens.MenuScreen;
 
 public class MyGame extends Game {
 
@@ -14,7 +14,7 @@ public class MyGame extends Game {
 
     @Override
     public void create() {
-        this.setScreen(new GameplayScreen(this));
+        this.setScreen(new MenuScreen(this));
     }
 
     public boolean isPaused() {
