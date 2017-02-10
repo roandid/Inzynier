@@ -1,5 +1,6 @@
 package com.inzynier.game.contact;
 
+import com.inzynier.game.gameplay.LevelController;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,9 +12,9 @@ public class ActionsDispatcher {
         ActionsDispatcher.actions.add(action);
     }
 
-    public static void dispatch() {
+    public static void dispatch(LevelController levelController) {
         for (ContactActionInterface action : ActionsDispatcher.actions) {
-            action.doAction();
+            action.doAction(levelController);
         }
 
         ActionsDispatcher.actions.clear();

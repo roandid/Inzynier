@@ -12,7 +12,11 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.inzynier.game.Constants;
@@ -24,6 +28,7 @@ import com.inzynier.game.entities.objects.Blocker;
 import com.inzynier.game.entities.Doors;
 import com.inzynier.game.entities.DrawableInterface;
 import com.inzynier.game.entities.Actor;
+import com.inzynier.game.entities.Door;
 import com.inzynier.game.entities.Position;
 import com.inzynier.game.factory.ActorFactory;
 import com.inzynier.game.gameplay.map.LayerGeneratorInterface;
@@ -52,16 +57,19 @@ public class Room {
     protected Texture leftWall, rightWall, upWall, downWall, ground;
     protected ObjectGeneratorInterface objectFactory;
     protected ArrayList<Blocker> listOfBlockers;
+    protected LevelController levelController;
+
     //debug
     BitmapFont font = new BitmapFont();
 
     public Room(String mapName, Actor player, Doors doors, LayerGeneratorInterface layerFactory,
-        ObjectGeneratorInterface objectFactory, RoomType roomType) {
+        ObjectGeneratorInterface objectFactory, RoomType roomType, LevelController levelController) {
 
         this.player = player;
         this.doors = doors;
         this.layerFactory = layerFactory;
         this.type = roomType;
+        this.levelController = levelController;
 
         this.objectFactory = objectFactory;
 
@@ -78,8 +86,6 @@ public class Room {
         this.upWall = new Texture("walls/wall_up.png");
         this.downWall = new Texture("walls/wall_down.png");
 
-        ActorFactory.getActorFactory().createBroccoli().setPosition(new Vector2(Constants.toBox2d(MyGame.WIDTH) / 2 + 10, Constants.toBox2d(MyGame.HEIGHT) / 2 - 10))
-            .createBody(world);
         this.ground = new Texture("walls/ground.png");
     }
 
@@ -98,20 +104,38 @@ public class Room {
         this.layerFactory.generateLayer(this.world, (TiledMapTileLayer) this.map.getLayers().get("ground"), Constants.BIT_GROUND, tileSize);
         this.layerFactory.generateLayer(this.world, (TiledMapTileLayer) this.map.getLayers().get("player_wall"), Constants.BIT_WALL_PLAYER, tileSize);
         this.layerFactory.generateLayer(this.world, (TiledMapTileLayer) this.map.getLayers().get("bullet_wall"), Constants.BIT_WALL_BULLET, tileSize);
-        this.layerFactory.generateLayer(this.world, (TiledMapTileLayer) this.map.getLayers().get("door"), Constants.BIT_DOOR, tileSize);
 
         this.objectFactory.generateObject(this.world, map.getLayers().get("block_up"), Constants.BIT_BLOCKER, 32, 32);
         this.objectFactory.generateObject(this.world, map.getLayers().get("block_down"), Constants.BIT_BLOCKER, 32, 32);
         this.objectFactory.generateObject(this.world, map.getLayers().get("block_right"), Constants.BIT_BLOCKER, 32, 32);
         this.objectFactory.generateObject(this.world, map.getLayers().get("block_left"), Constants.BIT_BLOCKER, 32, 32);
         this.objectFactory.generateObject(this.world, map.getLayers().get("lego"), Constants.BIT_LEGO, 32, 32);
+        this.createDoors();
 
+        ActorFactory.getActorFactory().createBroccoli().setPosition(new Vector2(10, 10)).createBody(this.world);
 
     }
 
     public void wakeUp(Position position) {
-        // Ustawić gracza zgodnie z pozycja - w tym wypadku wyjątkowo na środku
-        this.player.setPosition(new Vector2(Constants.toBox2d(MyGame.WIDTH) / 2, Constants.toBox2d(MyGame.HEIGHT) / 2));
+
+        switch (position) {
+            case LEFT:
+                this.player.setPosition(new Vector2(Constants.toBox2d(150), Constants.toBox2d(MyGame.HEIGHT) / 2));
+                break;
+            case RIGHT:
+                this.player.setPosition(new Vector2(Constants.toBox2d(1000), Constants.toBox2d(MyGame.HEIGHT) / 2));
+                break;
+            case UP:
+                this.player.setPosition(new Vector2(Constants.toBox2d(MyGame.WIDTH) / 2, Constants.toBox2d(150)));
+                break;
+            case DOWN:
+                this.player.setPosition(new Vector2(Constants.toBox2d(MyGame.WIDTH) / 2, Constants.toBox2d(700)));
+                break;
+            case CENTER:
+                this.player.setPosition(new Vector2(Constants.toBox2d(MyGame.WIDTH) / 2, Constants.toBox2d(MyGame.HEIGHT) / 2));
+                break;
+        }
+
         this.player.createBody(this.world);
     }
 
@@ -125,9 +149,7 @@ public class Room {
                 if (((Actor) object).isPlayer()) {
                     world.destroyBody(array.get(i));
                 }
-
             }
-
         }
     }
 
@@ -139,7 +161,7 @@ public class Room {
         this.renderer.setView(camera);
         this.renderer.render();
 
-        ActionsDispatcher.dispatch();
+        ActionsDispatcher.dispatch(this.levelController);
         this.world.step(dt, 6, 2);
         Array<Body> array = this.getBodies();
 
@@ -160,7 +182,6 @@ public class Room {
         this.renderObjects(dt, array);
         this.spriteBatch.end();
         b2dr.render(world, camera.combined);
-        checkPlayerPosition();
 
         //przy okreslonym warunku zniszczyc okreslone blokery
         Array<Body> blockers = getBlockers();
@@ -185,22 +206,6 @@ public class Room {
             }
         }
         return resultArray;
-    }
-//todo na podstawie map controllera
-
-    private void checkPlayerPosition() {
-        if (player.getPosition().y > 40) {
-            //controller.newRoom(UP)
-        }
-        if (player.getPosition().x < 1) {
-            //controller.newRoom(LEFT)
-        }
-        if (player.getPosition().x > 58) {
-            //controller.newRoom(RIGHT)
-        }
-        if (player.getPosition().y < 4) {
-            // controller.newRomm(DOWN)
-        }
     }
 
     protected Array<Body> getBodies() {
@@ -236,5 +241,69 @@ public class Room {
                 ((DrawableInterface) object).draw(dt, this.spriteBatch);
             }
         }
+    }
+
+    protected void createDoors() {
+
+        if (this.doors.isOnWest()) {
+            Body body = this.world.createBody(this.createBodyDef(10, 44));
+            PolygonShape shape = new PolygonShape();
+            shape.setAsBox(0.1f, 3);
+            body.createFixture(this.createFixtureDef(shape, Constants.BIT_WALL_PLAYER));
+
+            Door door = new Door(body, new Texture("walls/leftright_o.png"), new Texture("walls/leftright.png"), Door.Position.WEST);
+            body.setUserData(door);
+        }
+
+        if (this.doors.isOnEast()) {
+            Body body = this.world.createBody(this.createBodyDef(112, 44));
+            PolygonShape shape = new PolygonShape();
+            shape.setAsBox(0.1f, 3);
+            body.createFixture(this.createFixtureDef(shape, Constants.BIT_WALL_PLAYER));
+
+            Door door = new Door(body, new Texture("walls/leftright_o.png"), new Texture("walls/leftright.png"), Door.Position.EAST);
+            body.setUserData(door);
+        }
+
+        if (this.doors.isOnNorth()) {
+            Body body = this.world.createBody(this.createBodyDef(65, 73.5f));
+            PolygonShape shape = new PolygonShape();
+            shape.setAsBox(3, 0.1f);
+            body.createFixture(this.createFixtureDef(shape, Constants.BIT_WALL_PLAYER));
+
+            Door door = new Door(body, new Texture("walls/topdown_o.png"), new Texture("walls/topdown.png"), Door.Position.NORTH);
+            body.setUserData(door);
+        }
+
+        if (this.doors.isOnSouth()) {
+            Body body = this.world.createBody(this.createBodyDef(65, 10));
+            PolygonShape shape = new PolygonShape();
+            shape.setAsBox(3, 0.1f);
+            body.createFixture(this.createFixtureDef(shape, Constants.BIT_WALL_PLAYER));
+
+            Door door = new Door(body, new Texture("walls/topdown_o.png"), new Texture("walls/topdown.png"), Door.Position.SOUTH);
+            body.setUserData(door);
+        }
+    }
+
+    protected BodyDef createBodyDef(float col, float row) {
+        BodyDef bodyDef = new BodyDef();
+
+        bodyDef.type = BodyDef.BodyType.StaticBody;
+        bodyDef.position.set(col, row);
+
+        return bodyDef;
+    }
+
+    protected FixtureDef createFixtureDef(Shape cShape, short bits) {
+        FixtureDef fixtureDef = new FixtureDef();
+
+        fixtureDef.friction = 0.8f;
+        fixtureDef.shape = cShape;
+        fixtureDef.filter.categoryBits = bits;
+        fixtureDef.filter.maskBits = Constants.BIT_PLAYER | Constants.BIT_BULLET | Constants.BIT_ENEMY;
+        fixtureDef.isSensor = false;
+
+        return fixtureDef;
     }
 }

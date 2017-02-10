@@ -33,16 +33,11 @@ public class Level {
     }
 
     public void init() {
-        //jakaś magia
-        this.room = this.levelController.getBeginRoom();
-
-        //Potrzebny jest słuchacz gdzie wlezie postać i rakcja generatora na to
-        //czyli przemieszczenie obecnego pokoju i ponowne go pobranie
-//        this.generator.moveEast();
+        this.levelController.getBeginRoom();
     }
 
     public void run(float dt) {
-        this.room.run(dt);
+        this.levelController.getCurrentRoom().run(dt);
     }
 
 }

@@ -24,7 +24,7 @@ public class GameplayScreen implements Screen {
         this.myGame = myGame;
         this.player = ActorFactory.getActorFactory().createPlayer();
 
-        this.level = new Level(this.player, 10, 5);
+        this.level = new Level(this.player, 6, 10);
         this.level.init();
     }
 
