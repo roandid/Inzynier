@@ -75,10 +75,10 @@ public class ActorFactory {
             .setAtlasPath("zielony.txt")
             .setBulletTexture(new Texture("kredka_g.png"))
             .setStragegy(
-                new DoubleStrategy(
-                    new RandomWalkStrategy(2, 1),
-                    new WaitStrategy(new QuadraShootStrategy(), 1.5f)
-                )
+                    new DoubleStrategy(
+                            new AnimatedWalkStrategy(new RandomWalkStrategy(2, 1)),
+                            new WaitStrategy(new QuadraShootStrategy(), 1.5f)
+                    )
             )
             .build();
     }

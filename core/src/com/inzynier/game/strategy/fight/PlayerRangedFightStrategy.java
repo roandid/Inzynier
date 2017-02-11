@@ -21,19 +21,19 @@ public class PlayerRangedFightStrategy implements StrategyInterface {
 
     @Override
     public void action(Actor actor, float dt, World world) {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.W)) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
             this.bulletGenerator.generate(actor, world, new Vector2(0, actor.getRangedPower()));
         }
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.S)) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) {
             this.bulletGenerator.generate(actor, world, new Vector2(0, -actor.getRangedPower()));
         }
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.A)) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) {
             this.bulletGenerator.generate(actor, world, new Vector2(-actor.getRangedPower(), 0));
         }
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.D)) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)) {
             this.bulletGenerator.generate(actor, world, new Vector2(actor.getRangedPower(), 0));
         }
     }

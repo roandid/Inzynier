@@ -92,7 +92,7 @@ public class Actor implements DrawableInterface {
     }
 
     public float getContactPower() {
-        return this.power;
+        return this.contactPower;
     }
 
     public Texture getRangedWeaponTexture() {

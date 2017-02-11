@@ -62,8 +62,8 @@ public class AnimationsStorage {
 
         sb.draw(
             texture,
-            Constants.fromBox2d(position.x) - texture.getRegionWidth() * 0.25f,
-            Constants.fromBox2d(position.y) - texture.getRegionHeight() * 0.1255f
+            Constants.fromBox2d(position.x) - texture.getRegionWidth() * 0.025f,
+            Constants.fromBox2d(position.y) - texture.getRegionHeight() * 0.0055f
         );
     }
 

@@ -122,7 +122,7 @@ public class ActorBuilder {
         FixtureDef fixtureDef = new FixtureDef();
         PolygonShape shape = new PolygonShape();
 
-        shape.setAsBox(Constants.toBox2d(14), Constants.toBox2d(12));
+        shape.setAsBox(Constants.toBox2d(22), Constants.toBox2d(30));
         fixtureDef.shape = shape;
         fixtureDef.friction = 0.5f;
         fixtureDef.filter.categoryBits = Constants.BIT_ENEMY;
