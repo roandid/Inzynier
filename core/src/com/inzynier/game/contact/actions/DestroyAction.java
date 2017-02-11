@@ -2,6 +2,7 @@ package com.inzynier.game.contact.actions;
 
 import com.badlogic.gdx.physics.box2d.Body;
 import com.inzynier.game.contact.ContactActionInterface;
+import com.inzynier.game.gameplay.LevelController;
 
 public class DestroyAction implements ContactActionInterface {
 
@@ -12,7 +13,7 @@ public class DestroyAction implements ContactActionInterface {
     }
 
     @Override
-    public void doAction() {
+    public void doAction(LevelController levelController) {
         if (this.body == null) {
             return;
         }

@@ -53,6 +53,7 @@ public class LevelController {
         this.listDoors = new ArrayList<Doors>();
         this.player = player;
         this.init();
+
     }
     //</editor-fold>
 
@@ -65,16 +66,14 @@ public class LevelController {
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="getCurrentRoom - zwraca obecn pokój">
-    private Room getCurrentRoom() {
+    public Room getCurrentRoom() {
         return this.rooms[this.currentXPos][this.currentYPos];
     }
     //</editor-fold>
 
     public Room getBeginRoom() {
-        this.currentXPos = this.sizeField / 2;
-        this.currentYPos = this.sizeField / 2;
         //center
-        this.getCurrentRoom().wakeUp(Position.LEFT);
+        this.getCurrentRoom().wakeUp(Position.CENTER);
         return this.getCurrentRoom();
     }
 
@@ -116,6 +115,13 @@ public class LevelController {
         this.addRoom();
         this.addRoomAmout();
         this.addSpecialRoom();
+
+        for (int i = 0; i < this.sizeField; i++) {
+            for (int j = 0; j < this.sizeField; j++) {
+                System.out.print(this.numberRooms[i][j] + " ");
+            }
+            System.out.println();
+        }
     }
     //</editor-fold>
 
@@ -128,16 +134,16 @@ public class LevelController {
                     this.rooms[i][j] = null;
                 } else if (this.numberRoomsNoAmount[i][j] == this.NORMAL_ROOM) {
                     this.rooms[i][j] = new Room(this.map, this.player, this.listDoors.get(counterDoorList++),
-                        this.layerFactor, this.objectFactor, Room.RoomType.NORMAL_ROOM);
+                        this.layerFactor, this.objectFactor, Room.RoomType.NORMAL_ROOM, this);
                 } else if (this.numberRoomsNoAmount[i][j] == this.BOSS_ROOM) {
                     this.rooms[i][j] = new Room(this.map, this.player, this.listDoors.get(counterDoorList++),
-                        this.layerFactor, this.objectFactor, Room.RoomType.BOSS_ROOM);
+                        this.layerFactor, this.objectFactor, Room.RoomType.BOSS_ROOM, this);
                 } else if (this.numberRoomsNoAmount[i][j] == this.TREASURE_ROOM) {
                     this.rooms[i][j] = new Room(this.map, this.player, this.listDoors.get(counterDoorList++),
-                        this.layerFactor, this.objectFactor, Room.RoomType.TREASURE_ROOM);
+                        this.layerFactor, this.objectFactor, Room.RoomType.TREASURE_ROOM, this);
                 } else if ((this.numberRoomsNoAmount[i][j] == this.BEGIN_ROOM)) {
                     this.rooms[i][j] = new Room(this.map, this.player, this.listDoors.get(counterDoorList++),
-                        this.layerFactor, this.objectFactor, Room.RoomType.BEGIN_ROOM);
+                        this.layerFactor, this.objectFactor, Room.RoomType.BEGIN_ROOM, this);
                 }
                 if (this.rooms[i][j] != null) {
                     this.rooms[i][j].init();

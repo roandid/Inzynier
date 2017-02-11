@@ -8,6 +8,7 @@ import com.badlogic.gdx.physics.box2d.Manifold;
 import com.inzynier.game.contact.ContactHandlerInterface;
 import com.inzynier.game.contact.handlers.BulletActorContactHandler;
 import com.inzynier.game.contact.handlers.BulletContactHandler;
+import com.inzynier.game.contact.handlers.DoorActorContactHandler;
 import com.inzynier.game.contact.handlers.DummyContactHandler;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +27,7 @@ public class MyContactListener implements ContactListener {
         List<ContactHandlerInterface> handlers = new ArrayList<ContactHandlerInterface>();
         handlers.add(new BulletActorContactHandler());
         handlers.add(new BulletContactHandler());
+        handlers.add(new DoorActorContactHandler());
         handlers.add(new DummyContactHandler());
 
         MyContactListener.instance = new MyContactListener(handlers);
