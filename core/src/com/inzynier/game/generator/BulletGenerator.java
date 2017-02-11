@@ -42,7 +42,7 @@ public class BulletGenerator {
     protected FixtureDef createFixtureDef(Actor fighter) {
         FixtureDef fixtureDef = new FixtureDef();
         PolygonShape shape = new PolygonShape();
-        short masks = (short) (fighter.isPlayer() ? (Constants.BIT_WALL_BULLET | Constants.BIT_ENEMY) : (Constants.BIT_WALL_BULLET | Constants.BIT_PLAYER));
+        short masks = (short) (fighter.isPlayer() ? (Constants.BIT_LEGO | Constants.BIT_WALL_BULLET | Constants.BIT_ENEMY) : (Constants.BIT_LEGO | Constants.BIT_WALL_BULLET | Constants.BIT_PLAYER));
 
         shape.setAsBox(Constants.toBox2d(fighter.getRangedWeaponTexture().getWidth()), Constants.toBox2d(fighter.getRangedWeaponTexture().getHeight()));
         fixtureDef.shape = shape;

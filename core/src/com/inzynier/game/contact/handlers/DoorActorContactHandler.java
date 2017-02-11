@@ -7,7 +7,6 @@ import com.badlogic.gdx.physics.box2d.Manifold;
 import com.inzynier.game.contact.ActionsDispatcher;
 import com.inzynier.game.contact.ContactHandlerInterface;
 import com.inzynier.game.contact.actions.ChangeRoomAction;
-import com.inzynier.game.contact.actions.DestroyAction;
 import com.inzynier.game.entities.Actor;
 import com.inzynier.game.entities.Door;
 

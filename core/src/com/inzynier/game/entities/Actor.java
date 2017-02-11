@@ -12,9 +12,10 @@ import static java.lang.Math.abs;
 
 public class Actor implements DrawableInterface {
 
-    private static float minimalVel = 0.1f;
+    final private static float MINIMAL_VAL = 0.1f;
     protected boolean isPlayer;
     protected float power;
+    protected float contactPower;
     protected float health;
     protected AnimationsStorage animations;
     protected Texture bullet;
@@ -31,7 +32,8 @@ public class Actor implements DrawableInterface {
         BodyDef bodyDef,
         FixtureDef fixtureDef,
         Texture weapon,
-        float power
+        float power,
+        float contatctPower
     ) {
         this.isPlayer = isPlayer;
         this.health = health;
@@ -41,6 +43,7 @@ public class Actor implements DrawableInterface {
         this.fixtureDef = fixtureDef;
         this.bullet = weapon;
         this.power = power;
+        this.contactPower = contatctPower;
     }
 
     public Actor createBody(World world) {
@@ -64,7 +67,7 @@ public class Actor implements DrawableInterface {
 
         Vector2 vel = this.body.getLinearVelocity();
 
-        if (abs(vel.x) < Actor.minimalVel && abs(vel.y) < Actor.minimalVel) {
+        if (abs(vel.x) < Actor.MINIMAL_VAL && abs(vel.y) < Actor.MINIMAL_VAL) {
             this.animations.stop();
         }
     }
@@ -88,6 +91,10 @@ public class Actor implements DrawableInterface {
         return this.power;
     }
 
+    public float getContactPower() {
+        return this.power;
+    }
+
     public Texture getRangedWeaponTexture() {
         return this.bullet;
     }
@@ -107,7 +114,7 @@ public class Actor implements DrawableInterface {
     }
 
     public boolean isDead() {
-        return this.health <= 0.0;
+        return this.health <= 0.0f;
     }
 
     public boolean isPlayer() {

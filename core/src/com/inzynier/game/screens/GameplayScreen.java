@@ -1,5 +1,7 @@
 package com.inzynier.game.screens;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.physics.box2d.Box2D;
 import com.inzynier.game.MyGame;
@@ -7,9 +9,6 @@ import com.inzynier.game.entities.Actor;
 import com.inzynier.game.factory.ActorFactory;
 import com.inzynier.game.gameplay.Level;
 
-/**
- * Created by Krzysztof on 26.06.2016.
- */
 public class GameplayScreen implements Screen {
 
     protected MyGame myGame;
@@ -24,8 +23,7 @@ public class GameplayScreen implements Screen {
         this.myGame = myGame;
         this.player = ActorFactory.getActorFactory().createPlayer();
 
-        this.level = new Level(this.player, 6, 10);
-        this.level.init();
+        this.initNewLevel();
     }
 
     @Override
@@ -35,6 +33,18 @@ public class GameplayScreen implements Screen {
     @Override
     public void render(float f) {
         this.level.run(f);
+
+        if (this.level.isOver()) {
+            this.myGame.setScreen(new TheEndScreen(this.myGame));
+        }
+
+        if (this.player.isDead()) {
+            this.myGame.setScreen(new GameOverScreen(this.myGame));
+        }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.R)) {
+            this.initNewLevel();
+        }
     }
 
     @Override
@@ -57,4 +67,9 @@ public class GameplayScreen implements Screen {
     public void dispose() {
     }
 
+    private void initNewLevel() {
+
+        this.level = new Level(this.player, 6, 10);
+        this.level.init();
+    }
 }

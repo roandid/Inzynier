@@ -39,7 +39,6 @@ public class LevelController {
 
     public LevelController(int sizeField,
         int amountRoom,
-        String map,
         LayerGeneratorInterface layerFactory,
         ObjectGeneratorInterface objectFactory,
         Actor player
@@ -115,6 +114,7 @@ public class LevelController {
         this.addRoom();
         this.addRoomAmout();
         this.addSpecialRoom();
+        this.addRoomAmout();
 
         for (int i = 0; i < this.sizeField; i++) {
             for (int j = 0; j < this.sizeField; j++) {
@@ -133,16 +133,16 @@ public class LevelController {
                 if ((this.numberRoomsNoAmount[i][j] == this.FREE_SPACE) || (this.numberRoomsNoAmount[i][j] == this.HIDDEN_ROOM)) {
                     this.rooms[i][j] = null;
                 } else if (this.numberRoomsNoAmount[i][j] == this.NORMAL_ROOM) {
-                    this.rooms[i][j] = new Room(this.map, this.player, this.listDoors.get(counterDoorList++),
+                    this.rooms[i][j] = new Room(MapStorage.getRandomNormalRoom(), this.player, this.listDoors.get(counterDoorList++),
                         this.layerFactor, this.objectFactor, Room.RoomType.NORMAL_ROOM, this);
                 } else if (this.numberRoomsNoAmount[i][j] == this.BOSS_ROOM) {
-                    this.rooms[i][j] = new Room(this.map, this.player, this.listDoors.get(counterDoorList++),
+                    this.rooms[i][j] = new Room(MapStorage.getRandomBossMap(), this.player, this.listDoors.get(counterDoorList++),
                         this.layerFactor, this.objectFactor, Room.RoomType.BOSS_ROOM, this);
                 } else if (this.numberRoomsNoAmount[i][j] == this.TREASURE_ROOM) {
-                    this.rooms[i][j] = new Room(this.map, this.player, this.listDoors.get(counterDoorList++),
+                    this.rooms[i][j] = new Room(MapStorage.getRandomNormalRoom(), this.player, this.listDoors.get(counterDoorList++),
                         this.layerFactor, this.objectFactor, Room.RoomType.TREASURE_ROOM, this);
                 } else if ((this.numberRoomsNoAmount[i][j] == this.BEGIN_ROOM)) {
-                    this.rooms[i][j] = new Room(this.map, this.player, this.listDoors.get(counterDoorList++),
+                    this.rooms[i][j] = new Room(MapStorage.getStartMap(), this.player, this.listDoors.get(counterDoorList++),
                         this.layerFactor, this.objectFactor, Room.RoomType.BEGIN_ROOM, this);
                 }
                 if (this.rooms[i][j] != null) {
@@ -399,7 +399,10 @@ public class LevelController {
         this.copyArray(temp, this.numberRooms, this.sizeField, this.sizeField);
         for (int i = 0; i < this.sizeField; i++) {
             for (int j = 0; j < this.sizeField; j++) {
-                if ((this.numberRooms[i][j] == this.NORMAL_ROOM) || (this.numberRooms[i][j] == this.BEGIN_ROOM)) {
+                if ((this.numberRooms[i][j] == this.NORMAL_ROOM)
+                    || (this.numberRooms[i][j] == this.BEGIN_ROOM)
+                    || (this.numberRooms[i][j] == this.BOSS_ROOM)
+                    || (this.numberRooms[i][j] == this.TREASURE_ROOM)) {
                     this.checkNeighbor(temp, i, j);
                 }
             }
@@ -460,7 +463,7 @@ public class LevelController {
         List<Integer> listJ = new ArrayList<Integer>();
         for (int i = 0; i < this.sizeField; i++) {
             for (int j = 0; j < this.sizeField; j++) {
-                if (this.numberRooms[i][j] == (this.NORMAL_ROOM + 1)) {
+                if (this.numberRooms[i][j] == this.NORMAL_ROOM + 1) {
                     listI.add(i);
                     listJ.add(j);
                 }
@@ -469,12 +472,10 @@ public class LevelController {
         Random gen = new Random();
         int num = gen.nextInt(listI.size());
         //Dodanie pokoju z bosem
+        this.numberRooms[listI.get(num)][listJ.get(num)] = this.BOSS_ROOM;
         this.numberRoomsNoAmount[listI.get(num)][listJ.get(num)] = this.BOSS_ROOM;
         listI.remove(num);
         listJ.remove(num);
-        num = gen.nextInt(listI.size());
-        //Dodanie złotego pokoju
-        this.numberRoomsNoAmount[listI.get(num)][listJ.get(num)] = this.TREASURE_ROOM;
     }
     //</editor-fold>
 }
