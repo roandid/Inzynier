@@ -87,56 +87,56 @@ left
   orig: 64, 91
   offset: 0, 0
   index: 1
-down
+up
   rotate: false
   xy: 0, 274
   size: 64, 91
   orig: 64, 91
   offset: 0, 0
   index: 4
-down
+up
   rotate: false
   xy: 64, 274
   size: 64, 91
   orig: 64, 91
   offset: 0, 0
   index: 3
-down
+up
   rotate: false
   xy: 128, 274
   size: 64, 92
   orig: 64, 92
   offset: 0, 0
   index: 2
-down
+up
   rotate: false
   xy: 192, 274
   size: 64, 91
   orig: 64, 91
   offset: 0, 0
   index: 1
-up
+down
   rotate: false
   xy: 0, 366
   size: 64, 93
   orig: 64, 93
   offset: 0, 0
   index: 4
-up
+down
   rotate: false
   xy: 64, 366
   size: 64, 92
   orig: 64, 92
   offset: 0, 0
   index: 3
-up
+down
   rotate: false
   xy: 128, 366
   size: 64, 94
   orig: 64, 94
   offset: 0, 0
   index: 2
-up
+down
   rotate: false
   xy: 192, 366
   size: 64, 93
