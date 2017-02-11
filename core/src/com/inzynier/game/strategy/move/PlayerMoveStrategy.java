@@ -14,22 +14,22 @@ public class PlayerMoveStrategy implements StrategyInterface {
 
         if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
             actor.getAnimationsStorage().changeAnimation(AnimationsStorage.Action.WALK_UP);
-            actor.getBody().applyForceToCenter(0, 400, true);
+            actor.getBody().applyForceToCenter(0, 800, true);
         }
 
         if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
             actor.getAnimationsStorage().changeAnimation(AnimationsStorage.Action.WALK_DOWN);
-            actor.getBody().applyForceToCenter(0, -400, true);
+            actor.getBody().applyForceToCenter(0, -800, true);
         }
 
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
             actor.getAnimationsStorage().changeAnimation(AnimationsStorage.Action.WALK_LEFT);
-            actor.getBody().applyForceToCenter(-400, 0, true);
+            actor.getBody().applyForceToCenter(-800, 0, true);
         }
 
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
             actor.getAnimationsStorage().changeAnimation(AnimationsStorage.Action.WALK_RIGHT);
-            actor.getBody().applyForceToCenter(400, 0, true);
+            actor.getBody().applyForceToCenter(800, 0, true);
         }
     }
 }

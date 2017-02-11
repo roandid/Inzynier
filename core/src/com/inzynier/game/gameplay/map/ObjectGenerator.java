@@ -38,7 +38,7 @@ public class ObjectGenerator implements ObjectGeneratorInterface {
             fdef.shape = shape;
             fdef.isSensor = false;
             fdef.filter.categoryBits = bits;
-            fdef.filter.maskBits = Constants.BIT_PLAYER;
+            fdef.filter.maskBits = Constants.BIT_PLAYER | Constants.BIT_BULLET | Constants.BIT_ENEMY;
 
             Body body = world.createBody(bdef);
             body.createFixture(fdef);
@@ -50,8 +50,12 @@ public class ObjectGenerator implements ObjectGeneratorInterface {
     }
 
     private TiledObject makeObject(Body body, short bits) {
-        if(bits == Constants.BIT_BLOCKER) return new Blocker(body);
-        else if(bits == Constants.BIT_LEGO) return new LegoBlock(body);
-        else return null;
+        if (bits == Constants.BIT_BLOCKER) {
+            return new Blocker(body);
+        } else if (bits == Constants.BIT_LEGO) {
+            return new LegoBlock(body);
+        } else {
+            return null;
+        }
     }
 }

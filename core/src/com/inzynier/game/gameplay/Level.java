@@ -26,7 +26,6 @@ public class Level {
         this.levelController = new LevelController(
             sizeField,
             amountRoom,
-            "maps/tester.tmx",
             this.layerFactory,
             this.objectFactory, player
         );
@@ -40,4 +39,8 @@ public class Level {
         this.levelController.getCurrentRoom().run(dt);
     }
 
+    public boolean isOver() {
+        Room room = this.levelController.getCurrentRoom();
+        return room.isClear() && room.getType() == Room.RoomType.BOSS_ROOM;
+    }
 }

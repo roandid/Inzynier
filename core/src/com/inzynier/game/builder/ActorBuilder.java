@@ -15,7 +15,8 @@ public class ActorBuilder {
 
     protected boolean isPlayer;
     protected float health;
-    protected float power;
+    protected float rangedPower;
+    protected float contactPower;
     protected String atlasPath;
     protected Texture bulletTexture;
     protected BodyDef bodyDef;
@@ -43,8 +44,14 @@ public class ActorBuilder {
         return this;
     }
 
-    public ActorBuilder setPower(float power) {
-        this.power = power;
+    public ActorBuilder setRangedPower(float power) {
+        this.rangedPower = power;
+
+        return this;
+    }
+
+    public ActorBuilder setContactPower(float power) {
+        this.contactPower = power;
 
         return this;
     }
@@ -88,7 +95,8 @@ public class ActorBuilder {
             this.bodyDef,
             this.fixtureDef,
             this.bulletTexture,
-            this.power
+            this.rangedPower,
+            this.contactPower
         );
 
         this.reset();
@@ -118,7 +126,7 @@ public class ActorBuilder {
         fixtureDef.shape = shape;
         fixtureDef.friction = 0.5f;
         fixtureDef.filter.categoryBits = Constants.BIT_ENEMY;
-        fixtureDef.filter.maskBits = Constants.BIT_WALL_PLAYER | Constants.BIT_BULLET | Constants.BIT_LEGO;
+        fixtureDef.filter.maskBits = Constants.BIT_WALL_PLAYER | Constants.BIT_BULLET | Constants.BIT_LEGO | Constants.BIT_ENEMY | Constants.BIT_PLAYER;
 
         return fixtureDef;
     }
@@ -126,7 +134,8 @@ public class ActorBuilder {
     private void reset() {
         this.isPlayer = false;
         this.health = 1000;
-        this.power = 0;
+        this.rangedPower = 0;
+        this.contactPower = 0;
         this.bodyDef = this.createDefaultBodyDef();
         this.fixtureDef = this.createDefaultFixtureDef();
         this.stragegy = new DummyStrategy();
